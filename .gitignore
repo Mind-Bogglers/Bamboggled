@@ -2,6 +2,7 @@
 !.circleci
 out/
 *.xml
+!pom.xml
 *.log
 *.class
 *.iml
