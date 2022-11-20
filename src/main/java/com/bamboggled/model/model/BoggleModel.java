@@ -45,7 +45,7 @@ public class BoggleModel implements IBoggleModel {
         this.bigWordGenerator = new BoardLetterGeneratorBig();
         this.smallBoggleGrid = new BoggleGrid(4);
         this.bigBoggleGrid = new BoggleGrid(5);
-        this.dictionary = new BoggleDictionary("src/main/java/com/bamboggled/model/wordlist2.txt");
+        this.dictionary = new BoggleDictionary("src/main/java/com/bamboggled/model/wordlist.txt");
         this.currentWord = "";
         this.possiblePaths = null;
         this.players = null;
