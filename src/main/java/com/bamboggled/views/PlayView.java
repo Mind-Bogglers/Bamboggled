@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import java.io.IOException;
@@ -14,20 +15,28 @@ import java.util.ArrayList;
 
 public class PlayView {
 
-    BoggleModel model;
-    WelcomeView parentView;
+    private BoggleModel model;
+    private WelcomeView parentView;
 
-    ArrayList<Player> players;
+    private ArrayList<Player> players;
 
-    Stage stage;
+    private Stage stage;
 
-    Scene scene;
+    private Scene scene;
+
+    private int boardSize;
+
+    private RadioButton boardFour, boardFive;
+
+    private TextField textInput;
+
     public PlayView(WelcomeView view, BoggleModel model) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/PlayView.fxml"));
         this.parentView = view;
         this.scene = new Scene(root);
         this.players = new ArrayList<>();
         this.model = model;
+        this.boardSize = 4;
 
         this.stage = new Stage();
         this.stage.setTitle("Initialize");
@@ -37,27 +46,23 @@ public class PlayView {
     }
 
     public void nextPlayer(ActionEvent e) {
-        boolean check = true;
-        TextField textfield = (TextField) this.scene.lookup("#textInput");
-        String player = textfield.getText();
-        textfield.clear();
-        for (int i = 0; i < player.length(); i++) {
-            if (player.charAt(i) == '\n') {
-                check = false;
-                Label label = (Label) this.scene.lookup("#warning");
-                label.setText("Please input names one at a time.");
-            }
-        }
-        if (check) {
-            this.players.add(new Player(player.strip()));
+        String player = textInput.getText();
+        textInput.clear();
+        this.players.add(new Player(player.strip()));
+    }
+
+    public void boardSize(ActionEvent e) {
+        if (boardFive.isSelected()) {
+            this.boardSize = 5;
         }
     }
+
 
     public void submit(ActionEvent e) {
         if (this.players.size() == 0) {
             nextPlayer(e);
         } else {
-            new NextView();
+            this.model.newGame(this.boardSize, this.players);
         }
     }
 

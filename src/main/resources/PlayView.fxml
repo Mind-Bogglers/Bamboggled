@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -20,10 +21,12 @@
             <Font name="Impact" size="30.0" />
          </font>
       </Label>
-      <RadioButton id="yes" layoutX="39.0" layoutY="109.0" mnemonicParsing="false" text="4" />
-      <RadioButton id="no" layoutX="166.0" layoutY="109.0" mnemonicParsing="false" text="5" />
+      <RadioButton id="boardFour" layoutX="39.0" layoutY="109.0" mnemonicParsing="false" onAction="#boardSize" text="4">
+         <toggleGroup>
+            <ToggleGroup fx:id="boardSize" />
+         </toggleGroup></RadioButton>
+      <RadioButton id="boardFive" layoutX="166.0" layoutY="109.0" mnemonicParsing="false" onAction="#boardSize" text="5" toggleGroup="$boardSize" />
       <Button id="next" layoutX="246.0" layoutY="194.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="NEXT PLAYER" />
       <Button id="submit" layoutX="246.0" layoutY="233.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="DONE" />
-      <Label id="warning" fx:id="nextPlayer" layoutX="39.0" layoutY="269.0" prefHeight="17.0" prefWidth="325.0" />
    </children>
 </AnchorPane>

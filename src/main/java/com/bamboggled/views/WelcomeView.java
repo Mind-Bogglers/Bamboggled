@@ -38,7 +38,7 @@ public class WelcomeView {
         new PlayView(this, this.model);
     }
 
-    public void rules(ActionEvent e) {
+    public void rules(ActionEvent e) throws IOException {
         new InstructionsView(this, this.model);
     }
 
