@@ -1,4 +1,4 @@
-package com.bamboggled.views.WelcomeView;
+package com.bamboggled.views;
 
 import com.bamboggled.model.model.BoggleModel;
 
@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 
+import javax.swing.*;
 import java.io.IOException;
 
 public class WelcomeView {
@@ -26,12 +27,19 @@ public class WelcomeView {
     }
 
     private void start() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("WelcomeView.fxml"));
-        System.out.println(5);
+        Parent root = FXMLLoader.load(getClass().getResource("/WelcomeView.fxml"));
         this.stage.setTitle("Bamboogled");
         this.stage.setScene(new Scene(root));
         this.stage.show();
 
+    }
+
+    public void play(ActionEvent e) throws IOException {
+        new PlayView(this, this.model);
+    }
+
+    public void rules(ActionEvent e) {
+        new InstructionsView(this, this.model);
     }
 
 
