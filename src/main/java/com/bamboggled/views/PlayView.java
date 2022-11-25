@@ -78,6 +78,7 @@ public class PlayView {
         Parent root = loader.load();
         boardFour = (RadioButton) root.lookup("#boardFour");
         boardFive = (RadioButton) root.lookup("#boardFive");
+        boardFive.setDisable(true); //TODO: remove when the the 5x5 board is implemented
         submit = (Button) root.lookup("#submit");
         next = (Button) root.lookup("#next");
         error = (Label) root.lookup("#error");
@@ -117,9 +118,7 @@ public class PlayView {
             error.setText("Please enter at least one player.");
         } else {
             model.newGame(this.boardSize, this.players);
-            for (Player p: model.getPlayers()) {
-                System.out.println(p.getName());
-            }
+            new BoardGameView((Stage) ((Node) e.getSource()).getScene().getWindow());
         }
     }
 
