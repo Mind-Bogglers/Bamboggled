@@ -19,7 +19,7 @@ public class TextBasedView {
     private Scanner scanner;
 
     public static void main(String[] args) {
-        TextBasedView view = new TextBasedView(new BoggleModel());
+        TextBasedView view = new TextBasedView(BoggleModel.getInstance());
         view.play();
     }
 
