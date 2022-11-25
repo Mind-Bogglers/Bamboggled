@@ -6,13 +6,11 @@ import com.bamboggled.model.player.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.scene.control.TextField;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +18,7 @@ import java.util.ArrayList;
 public class PlayView {
 
     public ToggleGroup board;
+
     private BoggleModel model;
     private WelcomeView parentView;
 
@@ -29,59 +28,99 @@ public class PlayView {
 
     private Scene scene;
 
-    @FXML
     private int boardSize;
+
+    @FXML
+    RadioButton boardFour;
+
+    @FXML
+    public Button submit;
+    @FXML
+    public Button next;
 
     @FXML
     private RadioButton boardFive;
 
     @FXML
-    private TextField textfield;
+    private TextField textField;
 
-    public PlayView(BoggleModel model) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/PlayView.fxml"));
-        this.scene = new Scene(root);
+    @FXML
+    private Label error;
+
+    public PlayView(Stage stage) throws IOException {
+        this.model = BoggleModel.getInstance();
+        this.stage = stage;
+        if (stage == null) {
+            System.out.println("Stage is null");
+        }
         this.players = new ArrayList<>();
-        this.model = model;
-        this.boardSize = 4;
+        start();
 
-        this.stage = new Stage();
-        this.stage.setTitle("Initialize");
-        this.stage.setScene(this.scene);
-        this.stage.show();
+
+//        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/PlayView.fxml")));
+//        this.scene = new Scene(root);
+//        this.players = new ArrayList<>();
+//        this.boardSize = 4;
+//
+//        this.stage = stage;
+//        this.stage.setTitle("Initialize");
+//        this.stage.setScene(this.scene);
+//        this.stage.show();
 
     }
 
     public PlayView() {
+    }
 
+    private void start() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/PlayView.fxml"));
+        loader.setController(this);
+        Parent root = loader.load();
+        boardFour = (RadioButton) root.lookup("#boardFour");
+        boardFive = (RadioButton) root.lookup("#boardFive");
+        submit = (Button) root.lookup("#submit");
+        next = (Button) root.lookup("#next");
+        error = (Label) root.lookup("#error");
+        error.setText("");
+        boardFour.setOnAction(e -> boardSize = 4);
+        boardFive.setOnAction(e -> boardSize = 5);
+        next.setOnAction(this::nextPlayer);
+        submit.setOnAction(this::submit);
+
+
+        this.stage.setTitle("Initialize");
+        this.stage.setScene(new Scene(root));
+        this.stage.show();
     }
 
 
     public void nextPlayer(ActionEvent e) {
+        error.setText("");
         if (this.players == null) {
             this.players = new ArrayList<>();
         }
-        String player = textfield.getText();
-        textfield.clear();
-        this.players.add(new Player(player.strip()));
-    }
-
-    public void boardSize(ActionEvent e) {
-        if (boardFive.isSelected()) {
-            this.boardSize = 5;
+        if (textField.getText().equals("")) {
+            error.setText("Please enter a name.");
         } else {
-            this.boardSize = 4;
+            this.players.add(new Player(textField.getText()));
+            textField.setText("");
         }
     }
+
 
 
     public void submit(ActionEvent e) {
-        if (this.players.size() == 0) {
-            nextPlayer(e);
+        error.setText("");
+        if (this.boardSize == 0) {
+            error.setText("Please select a board size.");
+        } else if (this.players.size() == 0) {
+            error.setText("Please enter at least one player.");
         } else {
-            WelcomeView.model.newGame(this.boardSize, this.players);
+            model.newGame(this.boardSize, this.players);
+            for (Player p: model.getPlayers()) {
+                System.out.println(p.getName());
+            }
         }
     }
-
 
 }

@@ -8,25 +8,26 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bamboggled.views.PlayView">
+<AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label layoutX="39.0" layoutY="143.0" text="Input Player(s) name(s)">
             <font>
                 <Font name="Impact" size="30.0" />
             </font>
         </Label>
-        <TextField id="textInput" fx:id="textfield" layoutX="39.0" layoutY="196.0" prefHeight="61.0" prefWidth="191.0" />
+        <TextField id="textInput" fx:id="textField" layoutX="39.0" layoutY="196.0" prefHeight="61.0" prefWidth="191.0" />
         <Label layoutX="39.0" layoutY="46.0" text="Board size">
             <font>
                 <Font name="Impact" size="30.0" />
             </font>
         </Label>
-        <RadioButton id="boardFour" layoutX="39.0" layoutY="109.0" mnemonicParsing="false" onAction="#boardSize" text="4">
+        <RadioButton id="boardFour" fx:id="boardFour" layoutX="39.0" layoutY="109.0" mnemonicParsing="false" text="4">
             <toggleGroup>
                 <ToggleGroup fx:id="board" />
             </toggleGroup></RadioButton>
-        <RadioButton id="boardFive" fx:id="boardFive" layoutX="166.0" layoutY="109.0" mnemonicParsing="false" onAction="#boardSize" text="5" toggleGroup="$board" />
-        <Button id="next" layoutX="246.0" layoutY="194.0" mnemonicParsing="false" onAction="#nextPlayer" prefHeight="25.0" prefWidth="118.0" text="NEXT PLAYER" />
-        <Button id="submit" layoutX="246.0" layoutY="233.0" mnemonicParsing="false" onAction="#submit" prefHeight="25.0" prefWidth="118.0" text="DONE" />
+        <RadioButton id="boardFive" fx:id="boardFive" layoutX="166.0" layoutY="109.0" mnemonicParsing="false" text="5" toggleGroup="$board" />
+        <Button id="next" fx:id="next" layoutX="246.0" layoutY="194.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="NEXT PLAYER" />
+        <Button id="submit" fx:id="submit" layoutX="246.0" layoutY="233.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="DONE" />
+      <Label layoutX="194.0" id="error" fx:id="error" layoutY="269.0" text="Label" />
     </children>
 </AnchorPane>
