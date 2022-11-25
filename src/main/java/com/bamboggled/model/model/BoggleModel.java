@@ -36,11 +36,19 @@ public class BoggleModel implements IBoggleModel {
     public final int GRAY = 1;
     public final int RED = 2;
 
+    private static BoggleModel instance;
+
+    public static BoggleModel getInstance() {
+        if (instance == null) {
+            instance = new BoggleModel();
+        }
+        return instance;
+    }
 
     /**
      * Constructor for the BoggleModel class.
      */
-    public BoggleModel() {
+    private BoggleModel() {
         this.smallWordGenerator = new BoardLetterGeneratorSmall();
         this.bigWordGenerator = new BoardLetterGeneratorBig();
         this.smallBoggleGrid = new BoggleGrid(4);
