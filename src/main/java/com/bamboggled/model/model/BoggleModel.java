@@ -38,6 +38,11 @@ public class BoggleModel implements IBoggleModel {
 
     private static BoggleModel instance;
 
+
+    /**
+     * Get the only instance of the BoggleModel, or create one if it doesn't exist.
+     * @return a BoggleModel instance.
+     */
     public static BoggleModel getInstance() {
         if (instance == null) {
             instance = new BoggleModel();
