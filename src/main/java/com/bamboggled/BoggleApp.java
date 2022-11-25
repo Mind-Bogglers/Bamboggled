@@ -20,8 +20,7 @@ public class BoggleApp extends Application {
 
     @Override
     public void start(Stage beginStage) throws IOException {
-        this.model = new BoggleModel();
-        this.welcomeView = new WelcomeView(model, beginStage);
+        this.welcomeView = new WelcomeView(beginStage);
     }
 
 
