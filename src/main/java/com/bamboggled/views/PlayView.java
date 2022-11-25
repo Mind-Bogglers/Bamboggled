@@ -9,11 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +43,9 @@ public class PlayView {
 
     @FXML
     private TextField textField;
+
+    @FXML
+    private Label error;
 
     public PlayView(Stage stage) throws IOException {
         this.model = BoggleModel.getInstance();
@@ -80,6 +80,8 @@ public class PlayView {
         boardFive = (RadioButton) root.lookup("#boardFive");
         submit = (Button) root.lookup("#submit");
         next = (Button) root.lookup("#next");
+        error = (Label) root.lookup("#error");
+        error.setText("");
         boardFour.setOnAction(e -> boardSize = 4);
         boardFive.setOnAction(e -> boardSize = 5);
         next.setOnAction(this::nextPlayer);
@@ -93,26 +95,32 @@ public class PlayView {
 
 
     public void nextPlayer(ActionEvent e) {
+        error.setText("");
         if (this.players == null) {
             this.players = new ArrayList<>();
         }
-        String player = textField.getText();
-        textField.clear();
-        this.players.add(new Player(player.strip()));
+        if (textField.getText().equals("")) {
+            error.setText("Please enter a name.");
+        } else {
+            this.players.add(new Player(textField.getText()));
+            textField.setText("");
+        }
     }
 
 
 
     public void submit(ActionEvent e) {
-        if (this.players.size() == 0) {
-            nextPlayer(e);
+        error.setText("");
+        if (this.boardSize == 0) {
+            error.setText("Please select a board size.");
+        } else if (this.players.size() == 0) {
+            error.setText("Please enter at least one player.");
         } else {
             model.newGame(this.boardSize, this.players);
             for (Player p: model.getPlayers()) {
                 System.out.println(p.getName());
             }
         }
-        (Stage) ((Node) e.getSource()).getScene().getWindow()
     }
 
 }
