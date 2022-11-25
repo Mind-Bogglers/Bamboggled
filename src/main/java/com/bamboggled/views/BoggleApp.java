@@ -1,5 +1,6 @@
 package com.bamboggled.views;
 
+import com.bamboggled.model.model.BoggleModel;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,11 +16,23 @@ import javafx.stage.Stage;
 
 public class BoggleApp extends Application {
 
+    BoardGameView view;
+
     public static void main(String[] args) {
         launch(args);
     }
     @Override
     public void start(Stage stage) {
+
+        this.view = new BoardGameView(new BoggleModel(), stage);
+
+
+
+
+
+
+
+        /*
         try{
             AnchorPane root = FXMLLoader.load(getClass().getResource("/BoardGameView.fxml"));
             Scene scene = new Scene(root);
@@ -38,6 +51,8 @@ public class BoggleApp extends Application {
 
              }
 
+
+
             stage.setScene(scene);
             stage.show();
 
@@ -45,5 +60,7 @@ public class BoggleApp extends Application {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+         */
     }
 }

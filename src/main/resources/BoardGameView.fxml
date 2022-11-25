@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="1036.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bamboggled.views.BoardGameView.BoardGameView">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="1036.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bamboggled.views.BoardGameView">
    <children>
-      <GridPane fx:id="grid4" gridLinesVisible="true" layoutX="360.0" layoutY="200.0" prefHeight="424.0" prefWidth="571.0">
+      <GridPane gridLinesVisible="true" layoutX="360.0" layoutY="200.0" prefHeight="424.0" prefWidth="571.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -23,7 +23,22 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
+            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L">
+               <font>
+                  <Font size="75.0" />
+               </font>
+            </Label>
             <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="1">
+               <font>
+                  <Font size="75.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="2">
+               <font>
+                  <Font size="75.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="3">
                <font>
                   <Font size="75.0" />
                </font>
@@ -38,6 +53,16 @@
                   <Font size="75.0" />
                </font>
             </Label>
+            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font size="75.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <font>
+                  <Font size="75.0" />
+               </font>
+            </Label>
             <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.rowIndex="2">
                <font>
                   <Font size="75.0" />
@@ -48,27 +73,7 @@
                   <Font size="75.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="2">
-               <font>
-                  <Font size="75.0" />
-               </font>
-            </Label>
-            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <font>
-                  <Font size="75.0" />
-               </font>
-            </Label>
             <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="2" GridPane.rowIndex="2">
-               <font>
-                  <Font size="75.0" />
-               </font>
-            </Label>
-            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <font>
-                  <Font size="75.0" />
-               </font>
-            </Label>
-            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <font>
                   <Font size="75.0" />
                </font>
@@ -83,22 +88,17 @@
                   <Font size="75.0" />
                </font>
             </Label>
+            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font size="75.0" />
+               </font>
+            </Label>
             <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <font>
                   <Font size="75.0" />
                </font>
             </Label>
             <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="3" GridPane.rowIndex="3">
-               <font>
-                  <Font size="75.0" />
-               </font>
-            </Label>
-            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L">
-               <font>
-                  <Font size="75.0" />
-               </font>
-            </Label>
-            <Label alignment="CENTER" prefHeight="127.0" prefWidth="178.0" text="L" GridPane.columnIndex="3">
                <font>
                   <Font size="75.0" />
                </font>
