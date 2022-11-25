@@ -36,7 +36,7 @@ public class PlayView {
     @FXML
     public Button submit;
     @FXML
-    public Button next;
+    public Button submitPlayer;
 
     @FXML
     private RadioButton boardFive;
@@ -80,12 +80,12 @@ public class PlayView {
         boardFive = (RadioButton) root.lookup("#boardFive");
         boardFive.setDisable(true); //TODO: remove when the the 5x5 board is implemented
         submit = (Button) root.lookup("#submit");
-        next = (Button) root.lookup("#next");
+        submitPlayer = (Button) root.lookup("#submitPlayer");
         error = (Label) root.lookup("#error");
         error.setText("");
         boardFour.setOnAction(e -> boardSize = 4);
         boardFive.setOnAction(e -> boardSize = 5);
-        next.setOnAction(this::nextPlayer);
+        submitPlayer.setOnAction(this::submitPlayer);
         submit.setOnAction(this::submit);
 
 
@@ -95,7 +95,7 @@ public class PlayView {
     }
 
 
-    public void nextPlayer(ActionEvent e) {
+    public void submitPlayer(ActionEvent e) {
         error.setText("");
         String text = textField.getText().strip();
         if (this.players == null) {
@@ -113,15 +113,11 @@ public class PlayView {
 
     public void submit(ActionEvent e) {
         error.setText("");
-        String text = textField.getText().strip();
         if (this.boardSize == 0) {
             error.setText("Please select a board size.");
-        } else if (this.players.size() == 0 && text.equals("")) {
+        } else if (this.players.size() == 0) {
             error.setText("Please enter at least one player.");
         } else {
-            if (!text.equals("")) {
-                this.players.add(new Player(text));
-            }
             model.newGame(this.boardSize, this.players);
             new BoardGameView((Stage) ((Node) e.getSource()).getScene().getWindow());
         }
