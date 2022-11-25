@@ -2,6 +2,7 @@ package com.bamboggled.views;
 
 //import javafx.*;
 import com.bamboggled.model.model.BoggleModel;
+import com.bamboggled.model.player.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
@@ -34,10 +35,14 @@ public class BoardGameView {
     private Label playerNameLabel;
     private Label playerScoreLabel;
 
-    public BoardGameView(BoggleModel model, Stage stage){
-        this.model = model;
+    public BoardGameView(Stage stage){
+        this.model = BoggleModel.getInstance();
         this.stage = stage;
         initBoardViewUI();
+        //sanity test
+        for (Player p: this.model.getPlayers()) {
+            System.out.println(p.getName());
+        }
 
     }
 
