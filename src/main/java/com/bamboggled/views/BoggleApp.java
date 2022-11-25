@@ -24,7 +24,7 @@ public class BoggleApp extends Application {
     @Override
     public void start(Stage stage) {
 
-        this.view = new BoardGameView(new BoggleModel(), stage);
+        this.view = new BoardGameView(BoggleModel.getInstance(), stage);
 
 
 
