@@ -21,15 +21,18 @@ import java.io.IOException;
 
 public class BoardGameView {
 
-    Label[][] labels = new Label[4][4];
+    private Label[][] labels = new Label[4][4];
 
-    BoggleModel model;
+    private BoggleModel model;
 
-    Stage stage;
+    private Stage stage;
 
-    GridPane grid4;
-    
-    Timeline timeline;
+    private GridPane grid4;
+
+    private Timeline timeline;
+
+    private Label playerNameLabel;
+    private Label playerScoreLabel;
 
     public BoardGameView(BoggleModel model, Stage stage){
         this.model = model;
@@ -49,9 +52,13 @@ public class BoardGameView {
         try {
             // Set the root node, scene and also get a reference to the grid for grid4
 
-            AnchorPane root = FXMLLoader.load(getClass().getResource("/BoardGameView.fxml"));
-            Scene scene = new Scene(root);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/BoardGameView.fxml"));
+            loader.setController(this);
+            AnchorPane root = loader.load();
             grid4 = (GridPane) root.getChildren().get(0);
+            playerNameLabel = (Label) root.lookup("#playerName");
+            playerScoreLabel = (Label) root.lookup("#playerScore");
+            Scene scene = new Scene(root);
             
             //timeline
             timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e -> updateBoard()));
