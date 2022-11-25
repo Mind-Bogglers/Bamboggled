@@ -97,13 +97,14 @@ public class PlayView {
 
     public void nextPlayer(ActionEvent e) {
         error.setText("");
+        String text = textField.getText().strip();
         if (this.players == null) {
             this.players = new ArrayList<>();
         }
-        if (textField.getText().equals("")) {
+        if (text.equals("")) {
             error.setText("Please enter a name.");
         } else {
-            this.players.add(new Player(textField.getText()));
+            this.players.add(new Player(text));
             textField.setText("");
         }
     }
@@ -112,11 +113,15 @@ public class PlayView {
 
     public void submit(ActionEvent e) {
         error.setText("");
+        String text = textField.getText().strip();
         if (this.boardSize == 0) {
             error.setText("Please select a board size.");
-        } else if (this.players.size() == 0) {
+        } else if (this.players.size() == 0 && text.equals("")) {
             error.setText("Please enter at least one player.");
         } else {
+            if (!text.equals("")) {
+                this.players.add(new Player(text));
+            }
             model.newGame(this.boardSize, this.players);
             new BoardGameView((Stage) ((Node) e.getSource()).getScene().getWindow());
         }
