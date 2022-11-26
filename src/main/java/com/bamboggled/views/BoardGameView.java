@@ -140,6 +140,7 @@ public class BoardGameView {
 
 
             stage.setScene(scene);
+            stage.setMaximized(true);
             stage.show();
 
 
