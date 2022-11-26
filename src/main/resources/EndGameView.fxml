@@ -7,12 +7,12 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label alignment="CENTER" id="winnerLabel" fx:id="winnerLabel" layoutX="163.0" layoutY="39.0" prefHeight="107.0" prefWidth="273.0" text="Label" maxHeight="-Infinity" maxWidth="-Infinity">
+      <Label id="winnerLabel" fx:id="winnerLabel" alignment="CENTER" layoutX="345.0" layoutY="139.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="107.0" prefWidth="600.0" text="Label">
          <font>
             <Font size="47.0" />
          </font>
       </Label>
-      <Button id="playAgainButton" fx:id="playAgainButton" layoutX="388.0" layoutY="266.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="101.0" text="Button">
+      <Button id="playAgainButton" fx:id="playAgainButton" layoutX="600.0" layoutY="450.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="101.0" text="Play Again">
          <font>
             <Font size="16.0" />
          </font>
