@@ -117,6 +117,7 @@ public class BoardGameView {
                     } catch (GameNotInProgressException e) {
                         throw new RuntimeException(e);
                     } catch (NoMorePlayersException e) {
+                        timeline.stop();
                         new EndGameView(this.stage);
                         //throw new RuntimeException(e);
                         //TODO: Connect with gameEndView
