@@ -83,7 +83,9 @@ public class BoardGameView {
             try {
                 model.startGameForNextPlayer();
             } catch (NoMorePlayersException e) {
+
                 throw new RuntimeException(e);
+
             } catch (GameAlreadyInProgressException e) {
                 throw new RuntimeException(e);
             } catch (PlayerAlreadyPlayedException e) {
@@ -115,7 +117,9 @@ public class BoardGameView {
                     } catch (GameNotInProgressException e) {
                         throw new RuntimeException(e);
                     } catch (NoMorePlayersException e) {
-                        throw new RuntimeException(e);
+                        timeline.stop();
+                        new EndGameView(this.stage);
+                        //throw new RuntimeException(e);
                         //TODO: Connect with gameEndView
                     } catch (GameAlreadyInProgressException e) {
                         throw new RuntimeException(e);
@@ -136,6 +140,7 @@ public class BoardGameView {
 
 
             stage.setScene(scene);
+            stage.setMaximized(true);
             stage.show();
 
 
