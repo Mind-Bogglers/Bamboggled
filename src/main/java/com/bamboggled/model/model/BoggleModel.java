@@ -142,6 +142,7 @@ public class BoggleModel implements IBoggleModel {
      */
     @Override
     public void endGame() throws GameNotInProgressException {
+        history.clear(); // clear the history stack for this player (no undoing after the game is over).
         if (this.currentPlayer == null) {
             throw new GameNotInProgressException("There is no player currently playing to end the game for.");
         }
@@ -164,7 +165,7 @@ public class BoggleModel implements IBoggleModel {
 
     /**
      * Removes the last letter from the current word and updates the possible paths.
-     * @throws NoHistoryException If the current word is already empty. 
+     * @throws NoHistoryException If the current word is already empty.
      */
     public void removeLetterFromCurrentWord() throws NoHistoryException {
         restoreBackup();
