@@ -20,23 +20,24 @@ import java.util.Set;
  * @author Hassan El-Sheikha
  */
 public class BoggleModel implements IBoggleModel {
-    private final BoardLetterGeneratorSmall smallWordGenerator;
-    private final BoardLetterGeneratorBig bigWordGenerator;
-    private final BoggleGrid smallBoggleGrid;
-    private final BoggleGrid bigBoggleGrid;
-    private BoggleGrid currentGrid;
-    private final BoggleDictionary dictionary;
-    private Set<String> allWordsOnGrid;
-    private String currentWord;
-    private PossiblePathContainer possiblePaths;
-    private List<Player> players;
-    private Player currentPlayer;
-    private int currentPlayerIndex;
+    protected final BoardLetterGeneratorSmall smallWordGenerator;
+    protected final BoardLetterGeneratorBig bigWordGenerator;
+    protected final BoggleGrid smallBoggleGrid;
+    protected final BoggleGrid bigBoggleGrid;
+    protected BoggleGrid currentGrid;
+    protected final BoggleDictionary dictionary;
+    protected Set<String> allWordsOnGrid;
+    protected String currentWord;
+    protected PossiblePathContainer possiblePaths;
+    protected List<Player> players;
+    protected Player currentPlayer;
+    protected int currentPlayerIndex;
     public final int GREEN = 0;
     public final int GRAY = 1;
     public final int RED = 2;
 
     private static BoggleModel instance;
+    private final ModelHistory history;
 
 
     /**
@@ -63,6 +64,7 @@ public class BoggleModel implements IBoggleModel {
         this.possiblePaths = null;
         this.players = null;
         this.currentPlayer = null;
+        this.history = new ModelHistory();
     }
 
     /**
@@ -155,8 +157,17 @@ public class BoggleModel implements IBoggleModel {
      */
     @Override
     public void addLetterToCurrentWord(char letter) throws NoPathException {
+        makeBackup();
         this.possiblePaths = PathContainerUtils.fetchContainer(this.possiblePaths, this.currentGrid, Character.toUpperCase(letter));
         this.currentWord += Character.toUpperCase(letter);
+    }
+
+    /**
+     * Removes the last letter from the current word and updates the possible paths.
+     * @throws NoHistoryException If the current word is already empty. 
+     */
+    public void removeLetterFromCurrentWord() throws NoHistoryException {
+        restoreBackup();
     }
 
     /**
@@ -167,6 +178,7 @@ public class BoggleModel implements IBoggleModel {
      */
     @Override
     public boolean submitCurrentWord() {
+        this.history.clear();
         if (this.allWordsOnGrid.contains(this.currentWord)) {
             if (!this.currentPlayer.getFoundWords().contains(this.currentWord)) {
                 this.currentPlayer.addWord(this.currentWord);
@@ -187,6 +199,7 @@ public class BoggleModel implements IBoggleModel {
      * the word is invalid.
      */
     public int submitCurrentWordColored() {
+        this.history.clear();
         if (this.allWordsOnGrid.contains(this.currentWord)) {
             if (!this.currentPlayer.getFoundWords().contains(this.currentWord)) {
                 this.currentPlayer.addWord(this.currentWord);
@@ -215,6 +228,31 @@ public class BoggleModel implements IBoggleModel {
             throw new EmptyWordException("There is no current word to find a path to. Add at least one letter to the current word.");
         }
         return possiblePaths.getPaths().get(0);
+    }
+
+    /**
+     * Make a backup of the current state of the model.
+     */
+    private void makeBackup() {
+        this.history.push(new ModelSnapshot(this));
+    }
+
+    /**
+     * Undo the last action.
+     * @throws NoHistoryException if there is no history to undo.
+     */
+    private void restoreBackup() throws NoHistoryException {
+        if (this.history.size() == 0) {
+            throw new NoHistoryException("There is no history to undo.");
+        }
+        ModelSnapshot snapshot = this.history.pop();
+        this.currentGrid = snapshot.currentGrid;
+        this.allWordsOnGrid = snapshot.allWordsOnGrid;
+        this.currentWord = snapshot.currentWord;
+        this.possiblePaths = snapshot.possiblePaths;
+        this.players = snapshot.players;
+        this.currentPlayer = snapshot.currentPlayer;
+        this.currentPlayerIndex = snapshot.currentPlayerIndex;
     }
 
     /**
