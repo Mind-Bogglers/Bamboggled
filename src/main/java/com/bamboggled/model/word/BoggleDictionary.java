@@ -1,9 +1,7 @@
 package com.bamboggled.model.word;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.TreeSet;
 
@@ -43,6 +41,30 @@ public class BoggleDictionary {
         }
         System.out.println("Initialized " + wordcount + " words in the Dictionary.");;
     }
+
+    public BoggleDictionary(InputStream fileInputStream) {
+        String line = "";
+        int wordcount = 0;
+        this.legalWords = new TreeSet<String>();
+        try
+        {
+            BufferedReader br = new BufferedReader(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
+            while ((line = br.readLine()) != null)
+            {
+                if (line.strip().length() > 0) {
+                    legalWords.add(line.strip());
+                    wordcount++;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        System.out.println("Initialized " + wordcount + " words in the Dictionary.");;
+    }
+
 
     /**
      * Checks to see if a provided word is in the dictionary.
