@@ -33,6 +33,13 @@ public class DiceTest {
         }
 
     }
+    @Test
+    public void testBoardLetterGeneratorBigRandomness(){
+        BoardLetterGeneratorBig bigGenerator = new BoardLetterGeneratorBig();
+        String firstBoard = bigGenerator.generateString();
+        String secondBoard = bigGenerator.generateString();
+        assert firstBoard != secondBoard;
+    }
 
 }
 
