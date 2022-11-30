@@ -1,14 +1,21 @@
-import com.bamboggled.model.exceptions.NoPathException;
+import com.bamboggled.model.exceptions.*;
+import com.bamboggled.model.model.BoggleModel;
 import com.bamboggled.model.path.Path;
 import com.bamboggled.model.path.PathContainerUtils;
 import com.bamboggled.model.path.Position;
 import com.bamboggled.model.path.PossiblePathContainer;
 import com.bamboggled.model.grid.BoggleGrid;
 
+import com.bamboggled.model.player.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PathTest {
 
@@ -168,6 +175,65 @@ public class PathTest {
         expected.add(path3_1);
 
         assert expected.equals(new HashSet(endContainer.getPaths()));
+    }
+
+    @Test
+    public void testUndo() {
+
+        Player p1 = new Player("Player 1");
+        Player p2 = new Player("Player 2");
+        ArrayList<Player> playerList = new ArrayList<>();
+        playerList.add(p1);
+        playerList.add(p2);
+
+        BoggleModel model = BoggleModel.getInstance();
+        model.newGame(4, playerList,
+                "HELP" +
+                "ABCD" +
+                "ABCE" +
+                "ABEE");
+        System.out.println(model.getCurrentGrid());
+
+        try {
+            model.startGameForNextPlayer();
+        } catch (NoMorePlayersException | GameAlreadyInProgressException | PlayerAlreadyPlayedException e) {
+            fail();
+        }
+
+        try {
+            model.addLetterToCurrentWord('A');
+            model.addLetterToCurrentWord('B');
+            model.addLetterToCurrentWord('C');
+            model.addLetterToCurrentWord('D');
+            assert model.getCurrentWord().equals("ABCD");
+
+            Path pathToWord = new Path(new ArrayList<>(Arrays.asList(new Position(1, 0), new Position(1, 1), new Position(1, 2), new Position(1, 3))));
+            assertEquals(pathToWord, model.getPathToWord());
+
+            model.removeLetterFromCurrentWord();
+            assert model.getCurrentWord().equals("ABC");
+
+            pathToWord = new Path(new ArrayList<>(Arrays.asList(new Position(1, 0), new Position(1, 1), new Position(1, 2))));
+            assertEquals(pathToWord, model.getPathToWord());
+
+            model.endGame();
+            model.startGameForNextPlayer();
+
+            assert model.getCurrentWord().equals("");
+
+            try {
+                model.removeLetterFromCurrentWord();
+            } catch (NoHistoryException e){
+                return;
+            }
+            fail();
+
+        } catch (NoPathException | EmptyWordException | NoHistoryException | PlayerAlreadyPlayedException |
+                 NoMorePlayersException | GameAlreadyInProgressException | GameNotInProgressException e) {
+            fail();
+        }
+
+
     }
 
 }

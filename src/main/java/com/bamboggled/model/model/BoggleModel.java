@@ -108,6 +108,41 @@ public class BoggleModel implements IBoggleModel {
     }
 
     /**
+     * Given the players participating in the game and the size of the grid, creates a new game.
+     * @param dimensionsOfGrid The side length of the grid.
+     * @param players The players in the game, without duplicate players.
+     * @param letters The letters to be displayed on the board.
+     * @throws IllegalArgumentException If the dimensionsOfGrid is not 4 or 5, or if the player list is empty.
+     * @WARNING Mutates all players in the player list to reset their found words and scores.
+     */
+    public void newGame(int dimensionsOfGrid, List<Player> players, String letters) throws IllegalArgumentException{
+        this.currentWord = "";
+        this.possiblePaths = null;
+        if (dimensionsOfGrid == 4) {
+            this.currentGrid = this.smallBoggleGrid;
+            this.currentGrid.initalizeBoard(letters);
+        } else if (dimensionsOfGrid == 5) {
+            this.currentGrid = this.bigBoggleGrid;
+            this.currentGrid.initalizeBoard(letters);
+        } else {
+            throw new IllegalArgumentException("Dimensions of board must be 4 or 5");
+        }
+        this.allWordsOnGrid = WordUtils.findAllWords(dictionary, currentGrid);
+
+        if (players == null || players.size() == 0) {
+            throw new IllegalArgumentException("Must have at least one player");
+        }
+        this.players = players;
+        // clear player scores and words from prior rounds (if any).
+        for (Player player : this.players) {
+            player.resetScore();
+            player.clearFoundWords();
+            player.setPlayed(false);
+        }
+        this.currentPlayerIndex = 0;
+    }
+
+    /**
      * Starts the game for the next player in the list of players.
      * @throws NoMorePlayersException If there are no more players to play.
      * @throws GameAlreadyInProgressException If the game is already in progress for another player.
