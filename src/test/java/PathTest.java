@@ -25,6 +25,12 @@ public class PathTest {
 
     @Test
     public void testStartPath() throws NoPathException {
+        this.grid = new BoggleGrid(4);
+        this.grid.initalizeBoard("HELP" +
+                "HOPE" +
+                "TIME" +
+                "ROAM");
+
         Path basePath = new Path(new Position(1,2));
 
         PossiblePathContainer initialContainer = new PossiblePathContainer();
@@ -46,6 +52,11 @@ public class PathTest {
 
     @Test
     public void testContinuedPath() throws NoPathException {
+        this.grid = new BoggleGrid(4);
+        this.grid.initalizeBoard("HELP" +
+                "HOPE" +
+                "TIME" +
+                "ROAM");
         Path basePath = new Path(new Path(new Position(0, 0)), new Position(1, 1));
 
         PossiblePathContainer initialContainer = new PossiblePathContainer();
@@ -63,6 +74,11 @@ public class PathTest {
 
     @Test
     public void testDisconnectedPath() {
+        this.grid = new BoggleGrid(4);
+        this.grid.initalizeBoard("HELP" +
+                "HOPE" +
+                "TIME" +
+                "ROAM");
         Path basePath = new Path(new Position(0, 0));
 
         PossiblePathContainer initialContainer = new PossiblePathContainer();
@@ -78,6 +94,11 @@ public class PathTest {
 
     @Test
     public void testNoSuchCharacter(){
+        this.grid = new BoggleGrid(4);
+        this.grid.initalizeBoard("HELP" +
+                "HOPE" +
+                "TIME" +
+                "ROAM");
         Path basePath = new Path(new Position(0, 0));
 
         PossiblePathContainer initialContainer = new PossiblePathContainer();
@@ -93,6 +114,11 @@ public class PathTest {
 
     @Test
     public void testUsedCharacter(){
+        this.grid = new BoggleGrid(4);
+        this.grid.initalizeBoard("HELP" +
+                "HOPE" +
+                "TIME" +
+                "ROAM");
         Path basePath = new Path(new Position(1, 0));
         basePath = new Path(basePath, new Position(1, 1));
         basePath = new Path(basePath, new Position(0, 1));
@@ -111,6 +137,12 @@ public class PathTest {
 
     @Test
     public void testMultiplePaths() throws NoPathException {
+        this.grid = new BoggleGrid(4);
+        this.grid.initalizeBoard("HELP" +
+                "HOPE" +
+                "TIME" +
+                "ROAM");
+
         Path basePath1 = new Path(new Position(0,1));
         Path basePath2 = new Path(new Position(1, 3));
         Path basePath3 = new Path(new Position(2, 3));
