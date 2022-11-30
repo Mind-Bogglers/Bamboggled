@@ -11,6 +11,8 @@ import com.bamboggled.model.player.Player;
 import com.bamboggled.model.word.BoggleDictionary;
 import com.bamboggled.model.word.WordUtils;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -59,7 +61,10 @@ public class BoggleModel implements IBoggleModel {
         this.bigWordGenerator = new BoardLetterGeneratorBig();
         this.smallBoggleGrid = new BoggleGrid(4);
         this.bigBoggleGrid = new BoggleGrid(5);
-        this.dictionary = new BoggleDictionary("src/main/java/com/bamboggled/model/wordlist.txt");
+//        this.dictionary = new BoggleDictionary("src/main/resources/wordlist.txt");
+        // get file from resources as a stream instead
+        this.dictionary = new BoggleDictionary(getClass().getClassLoader().getResourceAsStream("wordlist.txt"));
+
         this.currentWord = "";
         this.possiblePaths = null;
         this.players = null;
