@@ -22,23 +22,24 @@ import java.util.Set;
  * @author Hassan El-Sheikha
  */
 public class BoggleModel implements IBoggleModel {
-    private final BoardLetterGeneratorSmall smallWordGenerator;
-    private final BoardLetterGeneratorBig bigWordGenerator;
-    private final BoggleGrid smallBoggleGrid;
-    private final BoggleGrid bigBoggleGrid;
-    private BoggleGrid currentGrid;
-    private final BoggleDictionary dictionary;
-    private Set<String> allWordsOnGrid;
-    private String currentWord;
-    private PossiblePathContainer possiblePaths;
-    private List<Player> players;
-    private Player currentPlayer;
-    private int currentPlayerIndex;
+    protected final BoardLetterGeneratorSmall smallWordGenerator;
+    protected final BoardLetterGeneratorBig bigWordGenerator;
+    protected final BoggleGrid smallBoggleGrid;
+    protected final BoggleGrid bigBoggleGrid;
+    protected BoggleGrid currentGrid;
+    protected final BoggleDictionary dictionary;
+    protected Set<String> allWordsOnGrid;
+    protected String currentWord;
+    protected PossiblePathContainer possiblePaths;
+    protected List<Player> players;
+    protected Player currentPlayer;
+    protected int currentPlayerIndex;
     public final int GREEN = 0;
     public final int GRAY = 1;
     public final int RED = 2;
 
     private static BoggleModel instance;
+    private final ModelHistory history;
 
 
     /**
@@ -68,6 +69,7 @@ public class BoggleModel implements IBoggleModel {
         this.possiblePaths = null;
         this.players = null;
         this.currentPlayer = null;
+        this.history = new ModelHistory();
     }
 
     /**
@@ -87,6 +89,41 @@ public class BoggleModel implements IBoggleModel {
         } else if (dimensionsOfGrid == 5) {
             this.currentGrid = this.bigBoggleGrid;
             this.currentGrid.initalizeBoard(this.bigWordGenerator.generateString());
+        } else {
+            throw new IllegalArgumentException("Dimensions of board must be 4 or 5");
+        }
+        this.allWordsOnGrid = WordUtils.findAllWords(dictionary, currentGrid);
+
+        if (players == null || players.size() == 0) {
+            throw new IllegalArgumentException("Must have at least one player");
+        }
+        this.players = players;
+        // clear player scores and words from prior rounds (if any).
+        for (Player player : this.players) {
+            player.resetScore();
+            player.clearFoundWords();
+            player.setPlayed(false);
+        }
+        this.currentPlayerIndex = 0;
+    }
+
+    /**
+     * Given the players participating in the game and the size of the grid, creates a new game.
+     * @param dimensionsOfGrid The side length of the grid.
+     * @param players The players in the game, without duplicate players.
+     * @param letters The letters to be displayed on the board.
+     * @throws IllegalArgumentException If the dimensionsOfGrid is not 4 or 5, or if the player list is empty.
+     * @WARNING Mutates all players in the player list to reset their found words and scores.
+     */
+    public void newGame(int dimensionsOfGrid, List<Player> players, String letters) throws IllegalArgumentException{
+        this.currentWord = "";
+        this.possiblePaths = null;
+        if (dimensionsOfGrid == 4) {
+            this.currentGrid = this.smallBoggleGrid;
+            this.currentGrid.initalizeBoard(letters);
+        } else if (dimensionsOfGrid == 5) {
+            this.currentGrid = this.bigBoggleGrid;
+            this.currentGrid.initalizeBoard(letters);
         } else {
             throw new IllegalArgumentException("Dimensions of board must be 4 or 5");
         }
@@ -145,6 +182,7 @@ public class BoggleModel implements IBoggleModel {
      */
     @Override
     public void endGame() throws GameNotInProgressException {
+        history.clear(); // clear the history stack for this player (no undoing after the game is over).
         if (this.currentPlayer == null) {
             throw new GameNotInProgressException("There is no player currently playing to end the game for.");
         }
@@ -160,8 +198,17 @@ public class BoggleModel implements IBoggleModel {
      */
     @Override
     public void addLetterToCurrentWord(char letter) throws NoPathException {
+        makeBackup();
         this.possiblePaths = PathContainerUtils.fetchContainer(this.possiblePaths, this.currentGrid, Character.toUpperCase(letter));
         this.currentWord += Character.toUpperCase(letter);
+    }
+
+    /**
+     * Removes the last letter from the current word and updates the possible paths.
+     * @throws NoHistoryException If the current word is already empty.
+     */
+    public void removeLetterFromCurrentWord() throws NoHistoryException {
+        restoreBackup();
     }
 
     /**
@@ -172,6 +219,7 @@ public class BoggleModel implements IBoggleModel {
      */
     @Override
     public boolean submitCurrentWord() {
+        this.history.clear();
         if (this.allWordsOnGrid.contains(this.currentWord)) {
             if (!this.currentPlayer.getFoundWords().contains(this.currentWord)) {
                 this.currentPlayer.addWord(this.currentWord);
@@ -192,6 +240,7 @@ public class BoggleModel implements IBoggleModel {
      * the word is invalid.
      */
     public int submitCurrentWordColored() {
+        this.history.clear();
         if (this.allWordsOnGrid.contains(this.currentWord)) {
             if (!this.currentPlayer.getFoundWords().contains(this.currentWord)) {
                 this.currentPlayer.addWord(this.currentWord);
@@ -220,6 +269,31 @@ public class BoggleModel implements IBoggleModel {
             throw new EmptyWordException("There is no current word to find a path to. Add at least one letter to the current word.");
         }
         return possiblePaths.getPaths().get(0);
+    }
+
+    /**
+     * Make a backup of the current state of the model.
+     */
+    private void makeBackup() {
+        this.history.push(new ModelSnapshot(this));
+    }
+
+    /**
+     * Undo the last action.
+     * @throws NoHistoryException if there is no history to undo.
+     */
+    private void restoreBackup() throws NoHistoryException {
+        if (this.history.size() == 0) {
+            throw new NoHistoryException("There is no history to undo.");
+        }
+        ModelSnapshot snapshot = this.history.pop();
+        this.currentGrid = snapshot.currentGrid;
+        this.allWordsOnGrid = snapshot.allWordsOnGrid;
+        this.currentWord = snapshot.currentWord;
+        this.possiblePaths = snapshot.possiblePaths;
+        this.players = snapshot.players;
+        this.currentPlayer = snapshot.currentPlayer;
+        this.currentPlayerIndex = snapshot.currentPlayerIndex;
     }
 
     /**

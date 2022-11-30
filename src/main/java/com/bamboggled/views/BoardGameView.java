@@ -126,8 +126,14 @@ public class BoardGameView {
                     } catch (PlayerAlreadyPlayedException e) {
                         throw new RuntimeException(e);
                     }
-                }
-                else {
+                } else if (keyEvent.getCode().equals(KeyCode.BACK_SPACE)) {
+                    try {
+                        model.removeLetterFromCurrentWord();
+                    } catch (NoHistoryException e) {
+                        return;
+                    }
+
+                } else {
                     try {
                         model.addLetterToCurrentWord(keyEvent.getText().charAt(0));
                     } catch (NoPathException e) {

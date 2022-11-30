@@ -11,6 +11,11 @@ import java.util.Objects;
 public class Path {
     List<Position> positions;
 
+    public Path(ArrayList<Position> positions){
+        this.positions = new ArrayList<>();
+        this.positions.addAll(positions);
+    }
+
     /**
      * Creates a new Path object from an initial position.
      * @param firstPosition Initial position
