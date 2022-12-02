@@ -1,9 +1,14 @@
 package com.bamboggled.views;
 
 import com.bamboggled.model.model.BoggleModel;
+import com.bamboggled.screenreader.ScreenReader;
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,19 +25,34 @@ public class InstructionsView {
 
     private BoggleModel model;
 
-    public InstructionsView(BoggleModel model) throws IOException {
+    @FXML
+    private Button backButton;
+
+    public InstructionsView(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/InstructionsView.fxml"));
-        this.model = model;
+        this.model = BoggleModel.getInstance();
         this.scene = new Scene(root);
 
-        this.stage = new Stage();
+        this.stage = stage;
         this.stage.setTitle("Instructions");
         this.stage.setScene(this.scene);
         this.stage.show();
 
+        if (model.visImpaired) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    ScreenReader.voice.speak("Instructions");;
+                }
+            });
+        }
     }
 
     public InstructionsView() {
 
+    }
+
+    public void back(ActionEvent e) throws IOException {
+        new WelcomeView((Stage) ((Node) e.getSource()).getScene().getWindow());
     }
 }

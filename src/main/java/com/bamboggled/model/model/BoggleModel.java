@@ -38,6 +38,8 @@ public class BoggleModel implements IBoggleModel {
 
     private static BoggleModel instance;
 
+    public boolean visImpaired;
+
 
     /**
      * Get the only instance of the BoggleModel, or create one if it doesn't exist.
@@ -63,6 +65,7 @@ public class BoggleModel implements IBoggleModel {
         this.possiblePaths = null;
         this.players = null;
         this.currentPlayer = null;
+        this.visImpaired = true;
     }
 
     /**

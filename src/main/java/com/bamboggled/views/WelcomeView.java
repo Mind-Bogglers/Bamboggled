@@ -1,14 +1,23 @@
 package com.bamboggled.views;
 
 import com.bamboggled.model.model.BoggleModel;
+import com.bamboggled.screenreader.ScreenReader;
 
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,11 +29,20 @@ public class WelcomeView {
 
     private Stage stage;
 
+    private ScreenReader screenReader;
+
+    @FXML
+    private Button playBtn;
+
+    @FXML
+    private Button rulesBtn;
 
     public WelcomeView(Stage stage) throws IOException {
         this.model = BoggleModel.getInstance();
         this.stage = stage;
+        this.screenReader = new ScreenReader(this.model);
         start();
+
     }
 
     public WelcomeView() {
@@ -38,12 +56,23 @@ public class WelcomeView {
         this.stage.setScene(new Scene(root));
         this.stage.show();
 
-        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
-
-        Voice voice = VoiceManager.getInstance().getVoice("kevin16");
-        voice.allocate();
-        setVoice(voice);
-        voice.speak("Welcome to Bamboggled.  Press Control B to disable Visually Impaired Mode at any time.");
+        if (model.visImpaired) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    ScreenReader.voice.speak("Welcome to Bamboggled.  Press Control B to disable Visually Impaired Mode at any time.");;
+                }
+            });
+        }
+        this.stage.getScene().setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.I) {
+                try {
+                    new InstructionsView(this.stage);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
     }
 
@@ -54,13 +83,8 @@ public class WelcomeView {
     }
 
     public void rules(ActionEvent e) throws IOException {
-        new InstructionsView(model);
-    }
-
-    private void setVoice(Voice voice) {
-        voice.setRate(100);
-        voice.setPitch(150);
-        voice.setVolume(10);
+        model.visImpaired = false;
+        new InstructionsView((Stage) ((Node) e.getSource()).getScene().getWindow());
     }
 
 }
