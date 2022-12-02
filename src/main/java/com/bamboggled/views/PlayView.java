@@ -76,6 +76,7 @@ public class PlayView {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/PlayView.fxml"));
         loader.setController(this);
         Parent root = loader.load();
+        textField.clear();
         boardFour = (RadioButton) root.lookup("#boardFour");
         boardFive = (RadioButton) root.lookup("#boardFive");
         boardFive.setDisable(true); //TODO: remove when the the 5x5 board is implemented

@@ -2,8 +2,6 @@ package com.bamboggled.views;
 
 import com.bamboggled.model.model.BoggleModel;
 import com.bamboggled.screenreader.ScreenReader;
-import com.sun.speech.freetts.Voice;
-import com.sun.speech.freetts.VoiceManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +21,8 @@ public class InstructionsView {
 
     private Stage stage;
 
+    private ScreenReader screenReader;
+
     private BoggleModel model;
 
     @FXML
@@ -32,20 +32,15 @@ public class InstructionsView {
         Parent root = FXMLLoader.load(getClass().getResource("/InstructionsView.fxml"));
         this.model = BoggleModel.getInstance();
         this.scene = new Scene(root);
+        this.screenReader = new ScreenReader();
 
         this.stage = stage;
         this.stage.setTitle("Instructions");
         this.stage.setScene(this.scene);
         this.stage.show();
 
-        if (model.visImpaired) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    ScreenReader.voice.speak("Instructions");;
-                }
-            });
-        }
+        this.screenReader.speak("Instructions");
+
     }
 
     public InstructionsView() {
