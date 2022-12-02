@@ -34,7 +34,7 @@ public class WelcomeView {
 
     private final String intro = "Welcome to Bamboggled.  Press Control B to disable Visually Impaired Mode at any time.";
 
-    private final String commands = "Press I for Instructions, or the P key to play";
+    private final String commands = "Press I for Instructions, or the Shift key to play";
 
     public WelcomeView(Stage stage) throws IOException {
         this.model = BoggleModel.getInstance();
@@ -81,7 +81,7 @@ public class WelcomeView {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-            } else if (e.getCode() == KeyCode.P) {
+            } else if (e.getCode() == KeyCode.SHIFT) {
                 try {
                     new PlayView(this.stage);
                 } catch (IOException ex) {

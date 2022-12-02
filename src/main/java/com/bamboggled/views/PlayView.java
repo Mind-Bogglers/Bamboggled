@@ -3,6 +3,9 @@ package com.bamboggled.views;
 
 import com.bamboggled.model.model.BoggleModel;
 import com.bamboggled.model.player.Player;
+import com.bamboggled.screenreader.ScreenReader;
+import com.sun.glass.ui.Screen;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +31,8 @@ public class PlayView {
 
     private Scene scene;
 
+    private ScreenReader screenReader;
+
     private int boardSize;
 
     @FXML
@@ -47,9 +52,14 @@ public class PlayView {
     @FXML
     private Label error;
 
+    private final String boards = "Welcome to Player Initialization.  Select 4 or 5 for Board size.  Press ENTER when complete.";
+
+    private final String names = "Please type out the names of all players.  To type in the name of the next player, hit SHIFT.  If you are done typing player names, hit ENTER to begin Bamboggled.";
+
     public PlayView(Stage stage) throws IOException {
         this.model = BoggleModel.getInstance();
         this.stage = stage;
+        this.screenReader = new ScreenReader();
         if (stage == null) {
             System.out.println("Stage is null");
         }
@@ -72,11 +82,12 @@ public class PlayView {
     public PlayView() {
     }
 
+
     private void start() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/PlayView.fxml"));
         loader.setController(this);
         Parent root = loader.load();
-        textField.clear();
+        Platform.runLater(root::requestFocus);
         boardFour = (RadioButton) root.lookup("#boardFour");
         boardFive = (RadioButton) root.lookup("#boardFive");
         boardFive.setDisable(true); //TODO: remove when the the 5x5 board is implemented
@@ -93,6 +104,9 @@ public class PlayView {
         this.stage.setTitle("Initialize");
         this.stage.setScene(new Scene(root));
         this.stage.show();
+
+        this.screenReader.speak(boards);
+        this.screenReader.speak(names);
     }
 
 
