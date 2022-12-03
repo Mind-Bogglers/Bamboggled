@@ -103,10 +103,10 @@ public class PlayView {
         submitPlayer = (Button) root.lookup("#submitPlayer");
         error = (Label) root.lookup("#error");
         error.setText("");
-        boardFour.setOnAction(e -> boardSize = 4);
-        boardFive.setOnAction(e -> boardSize = 5);
-        submitPlayer.setOnAction(this::submitPlayer);
-        submit.setOnAction(this::submit);
+        boardFour.setOnAction(e -> {boardSize = 4; model.visImpaired = false;});
+        boardFive.setOnAction(e -> {boardSize = 5; model.visImpaired = false;});
+        submitPlayer.setOnAction(e -> {model.visImpaired = false; submitPlayer(e);});
+        submit.setOnAction(e -> {model.visImpaired = false; submit(e);});
 
         this.scene = new Scene(root);
 
@@ -155,6 +155,7 @@ public class PlayView {
     private void setListeners() {
         AtomicBoolean board_flag = new AtomicBoolean(false);
         this.stage.getScene().setOnKeyPressed(e -> {
+            System.out.println("pressed");
             if (e.isControlDown() && e.getCode() == KeyCode.B) {
                 model.visImpaired = false;
             } if (!board_flag.get()) {
