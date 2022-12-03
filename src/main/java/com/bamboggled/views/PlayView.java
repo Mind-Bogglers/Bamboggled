@@ -6,6 +6,7 @@ import com.bamboggled.model.player.Player;
 import com.bamboggled.screenreader.ScreenReader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -153,7 +155,9 @@ public class PlayView {
     private void setListeners() {
         AtomicBoolean board_flag = new AtomicBoolean(false);
         this.stage.getScene().setOnKeyPressed(e -> {
-            if (!board_flag.get()) {
+            if (e.isControlDown() && e.getCode() == KeyCode.B) {
+                model.visImpaired = false;
+            } if (!board_flag.get()) {
                 if (e.getCode().getCode() == 52 || e.getCode().getCode() == 100) {
                     this.boardSize = 4;
 //                    screenReader.speak(String.format(boardSelection, this.boardSize));
@@ -169,12 +173,16 @@ public class PlayView {
             } else if (boardFive.isSelected() || boardFour.isSelected()) {
                 textField.requestFocus();
 //                screenReader.speak(names);
-                if (e.getCode() == KeyCode.SHIFT) {
-                    System.out.println("WHOA");
-                    submitPlayer.fire();
-                } else if (e.getCode() == KeyCode.ENTER) {
-                    submit.fire();
-                }
+                textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent keyEvent) {
+                        if (keyEvent.getCode() == KeyCode.SHIFT) {
+                            submitPlayer.fire();
+                        } else if (keyEvent.getCode() == KeyCode.ENTER) {
+                            submit.fire();
+                        }
+                    }
+                });
             }
         });
     }
