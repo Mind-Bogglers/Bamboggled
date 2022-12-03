@@ -1,18 +1,14 @@
 package com.bamboggled.views;
 
 import com.bamboggled.model.model.BoggleModel;
-import com.bamboggled.screenreader.ScreenReader;
 
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,17 +20,11 @@ public class WelcomeView {
 
     private Stage stage;
 
-    @FXML
-    private Button playBtn;
-
-    @FXML
-    private Button rulesBtn;
 
     public WelcomeView(Stage stage) throws IOException {
         this.model = BoggleModel.getInstance();
         this.stage = stage;
         start();
-
     }
 
     public WelcomeView() {
@@ -48,6 +38,13 @@ public class WelcomeView {
         this.stage.setScene(new Scene(root));
         this.stage.show();
 
+        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
+
+        Voice voice = VoiceManager.getInstance().getVoice("kevin16");
+        voice.allocate();
+        setVoice(voice);
+        voice.speak("Welcome to Bamboggled.  Press Control B to disable Visually Impaired Mode at any time.");
+
     }
 
 
@@ -60,5 +57,10 @@ public class WelcomeView {
         new InstructionsView((Stage) ((Node) e.getSource()).getScene().getWindow());
     }
 
+    private void setVoice(Voice voice) {
+        voice.setRate(100);
+        voice.setPitch(150);
+        voice.setVolume(10);
+    }
 
 }
