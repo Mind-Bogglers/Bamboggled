@@ -102,9 +102,13 @@ public class PlayView {
         submitPlayer.setOnAction(this::submitPlayer);
         submit.setOnAction(this::submit);
 
+        this.scene = new Scene(root);
+        scene.setOnKeyPressed(e -> {
+            // TODO: Put your keyevents here @Kevin
+        });
 
         this.stage.setTitle("Initialize");
-        this.stage.setScene(new Scene(root));
+        this.stage.setScene(scene);
 
         stage.getScene().getWindow().requestFocus();
 
