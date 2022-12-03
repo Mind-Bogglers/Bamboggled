@@ -4,7 +4,6 @@ package com.bamboggled.views;
 import com.bamboggled.model.model.BoggleModel;
 import com.bamboggled.model.player.Player;
 import com.bamboggled.screenreader.ScreenReader;
-import com.sun.glass.ui.Screen;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PlayView {
 
@@ -56,6 +56,10 @@ public class PlayView {
     private final String boards = "Welcome to Player Initialization.  Select 4 or 5 for Board size.  Press ENTER when complete.";
 
     private final String names = "Please type out the names of all players.  To type in the name of the next player, hit SHIFT.  If you are done typing player names, hit ENTER to begin Bamboggled.";
+
+    private final String confirmBoard = "You have confirmed your board selection as %d.";
+
+    private final String boardSelection = "You have selected board size %d.  Press ENTER to confirm.";
 
     public PlayView(Stage stage) throws IOException {
         this.model = BoggleModel.getInstance();
@@ -103,9 +107,6 @@ public class PlayView {
         submit.setOnAction(this::submit);
 
         this.scene = new Scene(root);
-        scene.setOnKeyPressed(e -> {
-            // TODO: Put your keyevents here @Kevin
-        });
 
         this.stage.setTitle("Initialize");
         this.stage.setScene(scene);
@@ -116,6 +117,8 @@ public class PlayView {
 
 //        this.screenReader.speak(boards);
 //        this.screenReader.speak(names);
+
+        this.setListeners();
     }
 
 
@@ -148,11 +151,30 @@ public class PlayView {
     }
 
     private void setListeners() {
-        boolean board_flag = false;
-        boolean player_flag = false;
+        AtomicBoolean board_flag = new AtomicBoolean(false);
         this.stage.getScene().setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.A) {
-                System.out.println("WHOA");
+            if (!board_flag.get()) {
+                if (e.getCode().getCode() == 52 || e.getCode().getCode() == 100) {
+                    this.boardSize = 4;
+//                    screenReader.speak(String.format(boardSelection, this.boardSize));
+                    boardFour.setSelected(true);
+                } else if (e.getCode().getCode() == 53 || e.getCode().getCode() == 101) {
+                    this.boardSize = 5;
+//                    screenReader.speak(String.format(boardSelection, this.boardSize));
+                    boardFive.setSelected(true);
+                } else if (e.getCode() == KeyCode.ENTER) {
+//                    screenReader.speak(String.format(confirmBoard, this.boardSize));
+                    board_flag.set(true);
+                }
+            } else if (boardFive.isSelected() || boardFour.isSelected()) {
+                textField.requestFocus();
+//                screenReader.speak(names);
+                if (e.getCode() == KeyCode.SHIFT) {
+                    System.out.println("WHOA");
+                    submitPlayer.fire();
+                } else if (e.getCode() == KeyCode.ENTER) {
+                    submit.fire();
+                }
             }
         });
     }
