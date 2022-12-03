@@ -63,9 +63,12 @@ public class PlayView {
 
     private final String boardSelection = "You have selected board size %d.  Press ENTER to confirm.";
 
+    private boolean board_flag;
+
     public PlayView(Stage stage) throws IOException {
         this.model = BoggleModel.getInstance();
         this.stage = stage;
+        boolean board_flag = false;
         this.screenReader = new ScreenReader();
         if (stage == null) {
             System.out.println("Stage is null");
@@ -103,10 +106,24 @@ public class PlayView {
         submitPlayer = (Button) root.lookup("#submitPlayer");
         error = (Label) root.lookup("#error");
         error.setText("");
-        boardFour.setOnAction(e -> {boardSize = 4; model.visImpaired = false;});
-        boardFive.setOnAction(e -> {boardSize = 5; model.visImpaired = false;});
-        submitPlayer.setOnAction(e -> {model.visImpaired = false; submitPlayer(e);});
-        submit.setOnAction(e -> {model.visImpaired = false; submit(e);});
+        boardFour.setOnAction(e -> {
+            boardSize = 4;
+            model.visImpaired = false;
+            board_flag = true;
+        });
+        boardFive.setOnAction(e -> {
+            boardSize = 5;
+            model.visImpaired = false;
+            board_flag = true;
+        });
+        submitPlayer.setOnAction(e -> {
+            model.visImpaired = false;
+            submitPlayer(e);
+        });
+        submit.setOnAction(e -> {
+            model.visImpaired = false;
+            submit(e);
+        });
 
         this.scene = new Scene(root);
 
@@ -139,7 +156,6 @@ public class PlayView {
     }
 
 
-
     public void submit(ActionEvent e) {
         error.setText("");
         if (this.boardSize == 0) {
@@ -153,12 +169,12 @@ public class PlayView {
     }
 
     private void setListeners() {
-        AtomicBoolean board_flag = new AtomicBoolean(false);
         this.stage.getScene().setOnKeyPressed(e -> {
             System.out.println("pressed");
             if (e.isControlDown() && e.getCode() == KeyCode.B) {
                 model.visImpaired = false;
-            } if (!board_flag.get()) {
+            }
+            if (!board_flag) {
                 if (e.getCode().getCode() == 52 || e.getCode().getCode() == 100) {
                     this.boardSize = 4;
 //                    screenReader.speak(String.format(boardSelection, this.boardSize));
@@ -168,22 +184,24 @@ public class PlayView {
 //                    screenReader.speak(String.format(boardSelection, this.boardSize));
                     boardFive.setSelected(true);
                 } else if (e.getCode() == KeyCode.ENTER) {
-//                    screenReader.speak(String.format(confirmBoard, this.boardSize));
-                    board_flag.set(true);
+                    screenReader.speak(String.format(confirmBoard, this.boardSize));
+                    board_flag = true;
+                    textField.requestFocus();
                 }
-            } else if (boardFive.isSelected() || boardFour.isSelected()) {
+            }
+        });
+        if (boardFive.isSelected() || boardFour.isSelected()) {
                 textField.requestFocus();
-//                screenReader.speak(names);
-                textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent keyEvent) {
-                        if (keyEvent.getCode() == KeyCode.SHIFT) {
-                            submitPlayer.fire();
-                        } else if (keyEvent.getCode() == KeyCode.ENTER) {
-                            submit.fire();
-                        }
-                    }
-                });
+        }
+        textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                screenReader.speak(names);
+                if (keyEvent.getCode() == KeyCode.SHIFT) {
+                    submitPlayer.fire();
+                } else if (keyEvent.getCode() == KeyCode.ENTER) {
+                    submit.fire();
+                }
             }
         });
     }
