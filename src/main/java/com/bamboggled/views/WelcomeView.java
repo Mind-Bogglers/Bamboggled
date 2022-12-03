@@ -43,7 +43,7 @@ public class WelcomeView {
         Voice voice = VoiceManager.getInstance().getVoice("kevin16");
         voice.allocate();
         setVoice(voice);
-        voice.speak("Welcome to Bamboggled.  Press Control B to disable Visually Impaired Mode at any time.");
+        //voice.speak("Welcome to Bamboggled.  Press Control B to disable Visually Impaired Mode at any time.");
 
     }
 

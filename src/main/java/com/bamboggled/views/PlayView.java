@@ -68,7 +68,6 @@ public class PlayView {
     public PlayView(Stage stage) throws IOException {
         this.model = BoggleModel.getInstance();
         this.stage = stage;
-        boolean board_flag = false;
         this.screenReader = new ScreenReader();
         if (stage == null) {
             System.out.println("Stage is null");
@@ -134,8 +133,7 @@ public class PlayView {
 
         this.stage.show();
 
-//        this.screenReader.speak(boards);
-//        this.screenReader.speak(names);
+        this.screenReader.speak(boards);
 
         this.setListeners();
     }
@@ -172,19 +170,21 @@ public class PlayView {
         this.stage.getScene().setOnKeyPressed(e -> {
             System.out.println("pressed");
             if (e.isControlDown() && e.getCode() == KeyCode.B) {
+                ScreenReader.voice.getAudioPlayer().cancel();
                 model.visImpaired = false;
             }
             if (!board_flag) {
                 if (e.getCode().getCode() == 52 || e.getCode().getCode() == 100) {
                     this.boardSize = 4;
-//                    screenReader.speak(String.format(boardSelection, this.boardSize));
+                    screenReader.speak(String.format(boardSelection, this.boardSize));
                     boardFour.setSelected(true);
                 } else if (e.getCode().getCode() == 53 || e.getCode().getCode() == 101) {
                     this.boardSize = 5;
-//                    screenReader.speak(String.format(boardSelection, this.boardSize));
+                    screenReader.speak(String.format(boardSelection, this.boardSize));
                     boardFive.setSelected(true);
                 } else if (e.getCode() == KeyCode.ENTER) {
                     screenReader.speak(String.format(confirmBoard, this.boardSize));
+                    screenReader.speak(names);
                     board_flag = true;
                     textField.requestFocus();
                 }
@@ -193,15 +193,11 @@ public class PlayView {
         if (boardFive.isSelected() || boardFour.isSelected()) {
                 textField.requestFocus();
         }
-        textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                screenReader.speak(names);
-                if (keyEvent.getCode() == KeyCode.SHIFT) {
-                    submitPlayer.fire();
-                } else if (keyEvent.getCode() == KeyCode.ENTER) {
-                    submit.fire();
-                }
+        textField.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.SHIFT) {
+                submitPlayer.fire();
+            } else if (keyEvent.getCode() == KeyCode.ENTER) {
+                submit.fire();
             }
         });
     }
