@@ -2,6 +2,7 @@ package com.bamboggled.model.path;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Aggregation of Position objects that is used for storing a path to a word.
@@ -9,6 +10,11 @@ import java.util.List;
  */
 public class Path {
     List<Position> positions;
+
+    public Path(ArrayList<Position> positions){
+        this.positions = new ArrayList<>();
+        this.positions.addAll(positions);
+    }
 
     /**
      * Creates a new Path object from an initial position.
@@ -57,4 +63,16 @@ public class Path {
         return positions.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Path path = (Path) o;
+        return Objects.equals(positions, path.positions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(positions);
+    }
 }
