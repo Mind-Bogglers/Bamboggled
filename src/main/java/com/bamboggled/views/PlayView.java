@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -88,6 +89,7 @@ public class PlayView {
         loader.setController(this);
         Parent root = loader.load();
         Platform.runLater(root::requestFocus);
+
         boardFour = (RadioButton) root.lookup("#boardFour");
         boardFive = (RadioButton) root.lookup("#boardFive");
         boardFive.setDisable(true); //TODO: remove when the the 5x5 board is implemented
@@ -103,10 +105,13 @@ public class PlayView {
 
         this.stage.setTitle("Initialize");
         this.stage.setScene(new Scene(root));
+
+        stage.getScene().getWindow().requestFocus();
+
         this.stage.show();
 
-        this.screenReader.speak(boards);
-        this.screenReader.speak(names);
+//        this.screenReader.speak(boards);
+//        this.screenReader.speak(names);
     }
 
 
@@ -138,4 +143,14 @@ public class PlayView {
         }
     }
 
+    private void setListeners() {
+        boolean board_flag = false;
+        boolean player_flag = false;
+        this.stage.getScene().setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.A) {
+                System.out.println("WHOA");
+            }
+        });
+    }
 }
+

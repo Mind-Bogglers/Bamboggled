@@ -54,14 +54,15 @@ public class WelcomeView {
         this.stage.setTitle("Bamboogled");
         this.stage.setScene(new Scene(root));
         this.stage.show();
-        this.screenReader.speak(intro);
-        this.screenReader.speak(commands);
+//        this.screenReader.speak(intro);
+//        this.screenReader.speak(commands);
         this.setListeners();
 
     }
 
 
     public void play(ActionEvent e) throws IOException {
+        model.visImpaired = false;
         new PlayView((Stage) ((Node) e.getSource()).getScene().getWindow());
 //        stage.close();
     }
