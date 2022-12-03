@@ -71,11 +71,8 @@ public class BoggleModel implements IBoggleModel {
         this.possiblePaths = null;
         this.players = null;
         this.currentPlayer = null;
-<<<<<<< HEAD
         this.visImpaired = true;
-=======
         this.history = new ModelHistory();
->>>>>>> b75246751d8ff452b99b697757c9512f7fe9fc23
     }
 
     /**
