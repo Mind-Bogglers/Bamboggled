@@ -20,7 +20,9 @@ public class ScreenReader {
     }
 
     public void speak(String text) {
-        ScreenReader.voice.speak(text);
+        Platform.runLater(() -> {
+            ScreenReader.voice.speak(text);;
+        });
     }
 
 }
