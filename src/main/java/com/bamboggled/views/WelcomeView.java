@@ -42,8 +42,14 @@ public class WelcomeView {
         Parent root = loader.load();
         this.playButton = (Button) root.lookup("#playBtn");
         this.instructionsButton = (Button) root.lookup("#rulesBtn");
-        this.playButton.setOnAction(this::play);
-        this.instructionsButton.setOnAction(this::rules);
+        this.playButton.setOnAction(e -> {
+            this.visImpaired = false;
+            play(e);
+        });
+        this.instructionsButton.setOnAction(e -> {
+            this.visImpaired = false;
+            rules(e);
+        });
         root.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 System.exit(0);
