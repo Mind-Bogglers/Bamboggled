@@ -16,16 +16,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class EndGameView {
+    private BoggleModel model;
+    private Stage stage;
+    private Button playAgainButton;
+    private Label winnerLabel;
+    private boolean visImpaired;
 
-    BoggleModel model;
-
-    Stage stage;
-
-    @FXML
-    Button playAgainButton;
-    Label winnerLabel;
-
-    public EndGameView(Stage stage){
+    public EndGameView(Stage stage, boolean visImpaired){
+        this.visImpaired = visImpaired;
         this.model = BoggleModel.getInstance();
         this.stage = stage;
         initEndGameView();
@@ -71,7 +69,7 @@ public class EndGameView {
 
     public void restartgame(ActionEvent e){
         try {
-            new PlayView((Stage) ((Node) e.getSource()).getScene().getWindow());
+            new PlayView((Stage) ((Node) e.getSource()).getScene().getWindow(), this.visImpaired);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

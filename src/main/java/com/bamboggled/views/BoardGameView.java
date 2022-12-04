@@ -40,8 +40,10 @@ public class BoardGameView {
     private Label playerNameLabel;
     private Label playerScoreLabel;
     private int pathColor;
+    private boolean visImpaired;
 
-    public BoardGameView(Stage stage){
+    public BoardGameView(Stage stage, boolean visImpaired){
+        this.visImpaired = visImpaired;
         this.model = BoggleModel.getInstance();
         this.stage = stage;
         initBoardViewUI();
@@ -118,7 +120,7 @@ public class BoardGameView {
                         throw new RuntimeException(e);
                     } catch (NoMorePlayersException e) {
                         timeline.stop();
-                        new EndGameView(this.stage);
+                        new EndGameView(this.stage, this.visImpaired);
                         //throw new RuntimeException(e);
                         //TODO: Connect with gameEndView
                     } catch (GameAlreadyInProgressException e) {

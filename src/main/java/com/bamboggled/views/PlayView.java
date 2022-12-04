@@ -26,7 +26,6 @@ public class PlayView {
     public ToggleGroup board;
 
     private BoggleModel model;
-    private WelcomeView parentView;
 
     private ArrayList<Player> players;
 
@@ -64,8 +63,10 @@ public class PlayView {
     private final String boardSelection = "You have selected board size %d.  Press ENTER to confirm.";
 
     private boolean board_flag;
+    private boolean visImpaired;
 
-    public PlayView(Stage stage) throws IOException {
+    public PlayView(Stage stage, boolean visImpaired) throws IOException {
+        this.visImpaired = visImpaired;
         this.model = BoggleModel.getInstance();
         this.stage = stage;
         this.screenReader = new ScreenReader();
@@ -88,8 +89,7 @@ public class PlayView {
 
     }
 
-    public PlayView() {
-    }
+
 
 
     private void start() throws IOException {
@@ -107,20 +107,20 @@ public class PlayView {
         error.setText("");
         boardFour.setOnAction(e -> {
             boardSize = 4;
-            model.visImpaired = false;
+            this.visImpaired = false;
             board_flag = true;
         });
         boardFive.setOnAction(e -> {
             boardSize = 5;
-            model.visImpaired = false;
+            this.visImpaired = false;
             board_flag = true;
         });
         submitPlayer.setOnAction(e -> {
-            model.visImpaired = false;
+            this.visImpaired = false;
             submitPlayer(e);
         });
         submit.setOnAction(e -> {
-            model.visImpaired = false;
+            this.visImpaired = false;
             submit(e);
         });
 
@@ -133,9 +133,12 @@ public class PlayView {
 
         this.stage.show();
 
-        this.screenReader.speak(boards);
+        if (visImpaired) {
+            this.screenReader.speak(boards);
+        }
 
         this.setListeners();
+        textField.setText("");
     }
 
 
@@ -162,7 +165,7 @@ public class PlayView {
             error.setText("Please enter at least one player.");
         } else {
             model.newGame(this.boardSize, this.players);
-            new BoardGameView((Stage) ((Node) e.getSource()).getScene().getWindow());
+            new BoardGameView((Stage) ((Node) e.getSource()).getScene().getWindow(), this.visImpaired);
         }
     }
 
@@ -171,7 +174,7 @@ public class PlayView {
             System.out.println("pressed");
             if (e.isControlDown() && e.getCode() == KeyCode.B) {
                 ScreenReader.voice.getAudioPlayer().cancel();
-                model.visImpaired = false;
+                this.visImpaired = false;
             }
             if (!board_flag) {
                 if (e.getCode().getCode() == 52 || e.getCode().getCode() == 100) {

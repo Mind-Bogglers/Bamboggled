@@ -9,12 +9,9 @@ public class ScreenReader {
 
     public static Voice voice;
 
-    private final BoggleModel model;
-
 
     public ScreenReader() {
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
-        this.model = BoggleModel.getInstance();
         voice = VoiceManager.getInstance().getVoice("kevin16");
         voice.allocate();
         voice.setRate(100);
@@ -23,14 +20,9 @@ public class ScreenReader {
     }
 
     public void speak(String text) {
-        if (this.model.visImpaired) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    ScreenReader.voice.speak(text);;
-                }
-            });
-        }
+        Platform.runLater(() -> {
+            ScreenReader.voice.speak(text);;
+        });
     }
 
 }
