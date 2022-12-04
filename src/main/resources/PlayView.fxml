@@ -15,7 +15,7 @@
                 <Font name="Impact" size="30.0" />
             </font>
         </Label>
-        <TextField id="textInput" fx:id="textField" layoutX="39.0" layoutY="196.0" prefHeight="61.0" prefWidth="191.0" />
+        <TextField id="textField" fx:id="textField" layoutX="39.0" layoutY="196.0" prefHeight="61.0" prefWidth="191.0" />
         <Label layoutX="39.0" layoutY="46.0" text="Board size">
             <font>
                 <Font name="Impact" size="30.0" />
