@@ -50,8 +50,8 @@ public class WelcomeView {
             } else if (event.isControlDown() && event.getCode() == KeyCode.B) {
                 this.visImpaired = !this.visImpaired;
                 if (this.visImpaired) {
-//                    this.screenReader.speak("Welcome to Bamboggled.  Press Control B after this message is complete to disable Visually Impaired Mode. Press I for instructions. Press P to play. Press Escape to exit.");
-                    this.screenReader.speak("Test");
+                    this.screenReader.speak("Welcome to Bamboggled.  Press Control B after this message is complete to disable Visually Impaired Mode. Press I for instructions. Press P to play. Press Escape to exit.");
+//                    this.screenReader.speak("Test");
                 } else {
                     ScreenReader.voice.getAudioPlayer().cancel();
                 }
@@ -67,9 +67,8 @@ public class WelcomeView {
         this.stage.show();
 
         if (this.visImpaired) {
-
-            //        this.screenReader.speak("Welcome to Bamboggled.  Press Control B after this message is complete to disable Visually Impaired Mode. Press I for instructions. Press P to play. Press Escape to exit.");
-            this.screenReader.speak("Test");
+            this.screenReader.speak("Welcome to Bamboggled.  Press Control B after this message is complete to disable Visually Impaired Mode. Press I for instructions. Press P to play. Press Escape to exit.");
+//            this.screenReader.speak("Test");
         }
     }
 

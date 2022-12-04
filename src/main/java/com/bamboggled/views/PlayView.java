@@ -107,20 +107,20 @@ public class PlayView {
         error.setText("");
         boardFour.setOnAction(e -> {
             boardSize = 4;
-            model.visImpaired = false;
+            this.visImpaired = false;
             board_flag = true;
         });
         boardFive.setOnAction(e -> {
             boardSize = 5;
-            model.visImpaired = false;
+            this.visImpaired = false;
             board_flag = true;
         });
         submitPlayer.setOnAction(e -> {
-            model.visImpaired = false;
+            this.visImpaired = false;
             submitPlayer(e);
         });
         submit.setOnAction(e -> {
-            model.visImpaired = false;
+            this.visImpaired = false;
             submit(e);
         });
 
@@ -174,7 +174,7 @@ public class PlayView {
             System.out.println("pressed");
             if (e.isControlDown() && e.getCode() == KeyCode.B) {
                 ScreenReader.voice.getAudioPlayer().cancel();
-                model.visImpaired = false;
+                this.visImpaired = false;
             }
             if (!board_flag) {
                 if (e.getCode().getCode() == 52 || e.getCode().getCode() == 100) {

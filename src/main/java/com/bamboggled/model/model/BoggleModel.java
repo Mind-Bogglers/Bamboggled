@@ -11,8 +11,6 @@ import com.bamboggled.model.player.Player;
 import com.bamboggled.model.word.BoggleDictionary;
 import com.bamboggled.model.word.WordUtils;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -40,8 +38,6 @@ public class BoggleModel implements IBoggleModel {
 
     private static BoggleModel instance;
     private final ModelHistory history;
-
-    public boolean visImpaired;
 
 
     /**
@@ -71,7 +67,6 @@ public class BoggleModel implements IBoggleModel {
         this.possiblePaths = null;
         this.players = null;
         this.currentPlayer = null;
-        this.visImpaired = true;
         this.history = new ModelHistory();
     }
 
