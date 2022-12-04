@@ -66,6 +66,7 @@ public class PlayView {
     private boolean visImpaired;
 
     public PlayView(Stage stage, boolean visImpaired) throws IOException {
+        ScreenReader.voice.getAudioPlayer().cancel();
         this.visImpaired = visImpaired;
         this.model = BoggleModel.getInstance();
         this.stage = stage;
@@ -133,10 +134,6 @@ public class PlayView {
 
         this.stage.show();
 
-        if (visImpaired) {
-            this.screenReader.speak(boards);
-        }
-
         this.setListeners();
         textField.setText("");
     }
@@ -171,7 +168,6 @@ public class PlayView {
 
     private void setListeners() {
         this.stage.getScene().setOnKeyPressed(e -> {
-            System.out.println("pressed");
             if (e.isControlDown() && e.getCode() == KeyCode.B) {
                 ScreenReader.voice.getAudioPlayer().cancel();
                 this.visImpaired = false;

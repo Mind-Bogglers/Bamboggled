@@ -2,6 +2,7 @@ package com.bamboggled.views;
 
 import com.bamboggled.model.model.BoggleModel;
 import com.bamboggled.model.player.Player;
+import com.bamboggled.screenreader.ScreenReader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -22,10 +24,13 @@ public class EndGameView {
     private Label winnerLabel;
     private boolean visImpaired;
 
+    private ScreenReader screenReader;
+
     public EndGameView(Stage stage, boolean visImpaired){
         this.visImpaired = visImpaired;
         this.model = BoggleModel.getInstance();
         this.stage = stage;
+        this.screenReader = new ScreenReader();
         initEndGameView();
     }
 
@@ -52,10 +57,17 @@ public class EndGameView {
             //set the label to the winner
             winnerLabel.setText(winner + " won!");
 
+            if (this.visImpaired) {
+                this.screenReader.speak(String.format("Congratulations, %s won!", winner));
+                this.screenReader.speak("Press SHIFT to play again, or ESCAPE key to exit");
+            }
+
 
 
             this.stage.setScene(scene);
             stage.show();
+
+            this.setListeners();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -73,6 +85,20 @@ public class EndGameView {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    private void setListeners() {
+        this.stage.getScene().setOnKeyPressed(e -> {
+            if (e.isControlDown() && e.getCode() == KeyCode.B) {
+                this.visImpaired = !this.visImpaired;
+            }
+            if (e.getCode() == KeyCode.SHIFT) {
+                playAgainButton.fire();
+            }
+            if (e.getCode() == KeyCode.ESCAPE) {
+                System.exit(0);
+            }
+        });
     }
 
 

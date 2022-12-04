@@ -18,8 +18,11 @@ public class InstructionsView {
     private Button backButton;
 
     public InstructionsView(Stage stage, boolean visImpaired) throws IOException {
+        ScreenReader.voice.getAudioPlayer().cancel();
         this.visImpaired = visImpaired;
         this.screenReader = new ScreenReader();
+
+        System.out.println(this.visImpaired);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/InstructionsView.fxml"));
         loader.setController(this);
@@ -28,10 +31,8 @@ public class InstructionsView {
             if (event.getCode() == KeyCode.ESCAPE) {
                 backButton.fire();
             } else if (event.isControlDown() && event.getCode() == KeyCode.B) {
-                System.out.println("HERE");
                 this.visImpaired = !this.visImpaired;
                 if (this.visImpaired) {
-                    System.out.println("HERE");
                     this.screenReader.speak("Each player is given a board that contains anywhere from 16 to 25 letters.  The objective is to find every possible legal word on the board.  A legal word can be defined by a string of letters such that each letter is either directly to the left or right, above or below, or diagonal to any letter preceding or following it.  The player that finds the most number of words wins.");
                     this.screenReader.speak("Press the escape key to return to the main menu.");
                 } else {
@@ -39,7 +40,6 @@ public class InstructionsView {
                 }
             }
         });
-
         this.backButton = (Button) root.lookup("#backButton");
         backButton.setOnAction(this::back);
 

@@ -20,9 +20,12 @@ public class ScreenReader {
     }
 
     public void speak(String text) {
-        Platform.runLater(() -> {
-            ScreenReader.voice.speak(text);;
-        });
+        Runnable speaker = new Runnable() {
+                public void run() {
+                    voice.speak(text);
+                }
+            };
+        (new Thread(speaker)).start();
     }
 
 }
