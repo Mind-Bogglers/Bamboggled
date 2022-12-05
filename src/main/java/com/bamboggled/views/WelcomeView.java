@@ -27,7 +27,7 @@ public class WelcomeView {
     private Button playButton;
     private Button instructionsButton;
 
-    private final String intro = "Welcome to Bamboggled.  Press Control B after this message is complete to disable Visually Impaired Mode. Press I for instructions. Press SHIFT to play. Press Escape to exit.";
+    private final String intro = "W.";
 
 
     public WelcomeView(Stage stage, boolean visImpaired) throws IOException {
@@ -46,18 +46,12 @@ public class WelcomeView {
         this.instructionsButton = (Button) root.lookup("#rulesBtn");
         this.playButton.setOnAction(e -> {
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             play(e);
-        });
-        this.instructionsButton.setOnMouseClicked(e -> {
-            this.visImpaired = false;
-            try {
-                new InstructionsView((Stage) ((Node) e.getSource()).getScene().getWindow(), this.visImpaired);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
         });
         this.instructionsButton.setOnAction(e -> {
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             rules(e);
         });
         root.setOnKeyPressed(event -> {
@@ -69,9 +63,19 @@ public class WelcomeView {
                     ScreenReader.voice.getAudioPlayer().cancel();
                 }
             } else if (event.getCode() == KeyCode.SHIFT) {
-                playButton.fire();
+                ScreenReader.voice.getAudioPlayer().cancel();
+                try {
+                    new PlayView((Stage) ((Node) event.getSource()).getScene().getWindow(), this.visImpaired);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             } else if (event.getCode() == KeyCode.I) {
-                instructionsButton.fire();
+                ScreenReader.voice.getAudioPlayer().cancel();
+                try {
+                    new InstructionsView((Stage) ((Node) event.getSource()).getScene().getWindow(), this.visImpaired);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         this.stage.setTitle("Bamboggled");
@@ -96,6 +100,7 @@ public class WelcomeView {
     }
 
     public void rules(ActionEvent e) {
+        ScreenReader.voice.getAudioPlayer().cancel();
         try {
             new InstructionsView((Stage) ((Node) e.getSource()).getScene().getWindow(), this.visImpaired);
         } catch (IOException ioException) {

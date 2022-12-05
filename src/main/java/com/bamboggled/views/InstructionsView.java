@@ -17,8 +17,11 @@ public class InstructionsView {
     private boolean visImpaired;
     private Button backButton;
 
+    private final String instructions = "Each player is given a board that contains anywhere from 16 to 25 letters.  The objective is to find every possible legal word on the board.  A legal word can be defined by a string of letters such that each letter is either directly to the left or right, above or below, or diagonal to any letter preceding or following it.  The player that finds the most number of words wins.";
+
+    private final String exit = "Press the escape key to return to the main menu.";
+
     public InstructionsView(Stage stage, boolean visImpaired) throws IOException {
-        ScreenReader.voice.getAudioPlayer().cancel();
         this.visImpaired = visImpaired;
         this.screenReader = new ScreenReader();
 
@@ -33,8 +36,8 @@ public class InstructionsView {
             } else if (event.isControlDown() && event.getCode() == KeyCode.B) {
                 this.visImpaired = !this.visImpaired;
                 if (this.visImpaired) {
-                    this.screenReader.speak("Each player is given a board that contains anywhere from 16 to 25 letters.  The objective is to find every possible legal word on the board.  A legal word can be defined by a string of letters such that each letter is either directly to the left or right, above or below, or diagonal to any letter preceding or following it.  The player that finds the most number of words wins.");
-                    this.screenReader.speak("Press the escape key to return to the main menu.");
+                    this.screenReader.speak(instructions);
+                    this.screenReader.speak(exit);
                 } else {
                     ScreenReader.voice.getAudioPlayer().cancel();
                 }
@@ -50,8 +53,8 @@ public class InstructionsView {
 
 
         if (visImpaired) {
-            this.screenReader.speak("Each player is given a board that contains anywhere from 16 to 25 letters.  The objective is to find every possible legal word on the board.  A legal word can be defined by a string of letters such that each letter is either directly to the left or right, above or below, or diagonal to any letter preceding or following it.  The player that finds the most number of words wins.");
-            this.screenReader.speak("Press the escape key to return to the main menu.");
+            this.screenReader.speak(instructions);
+            this.screenReader.speak(exit);
         }
     }
 

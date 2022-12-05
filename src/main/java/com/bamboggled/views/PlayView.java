@@ -66,7 +66,6 @@ public class PlayView {
     private boolean visImpaired;
 
     public PlayView(Stage stage, boolean visImpaired) throws IOException {
-        ScreenReader.voice.getAudioPlayer().cancel();
         this.visImpaired = visImpaired;
         this.model = BoggleModel.getInstance();
         this.stage = stage;
@@ -109,19 +108,23 @@ public class PlayView {
         boardFour.setOnAction(e -> {
             boardSize = 4;
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             board_flag = true;
         });
         boardFive.setOnAction(e -> {
             boardSize = 5;
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             board_flag = true;
         });
         submitPlayer.setOnAction(e -> {
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             submitPlayer(e);
         });
         submit.setOnAction(e -> {
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             submit(e);
         });
 
@@ -133,6 +136,10 @@ public class PlayView {
         stage.getScene().getWindow().requestFocus();
 
         this.stage.show();
+
+        if (this.visImpaired) {
+            this.screenReader.speak(boards);
+        }
 
         this.setListeners();
         textField.setText("");
