@@ -68,7 +68,6 @@ public class EndGameView {
      */
     public EndGameView(Stage stage, boolean visImpaired){
         this.visImpaired = visImpaired;
-        System.out.println(visImpaired);
         this.model = BoggleModel.getInstance();
         this.stage = stage;
         this.screenReader = new ScreenReader();
