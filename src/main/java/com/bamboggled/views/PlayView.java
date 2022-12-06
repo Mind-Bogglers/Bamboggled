@@ -144,7 +144,7 @@ public class PlayView {
     }
 
     /**
-     * Starts the playView screen
+     * Loads the playView screen
      * @throws IOException Exception thrown if PlayView could not be loaded
      * */
     private void start() throws IOException {
@@ -248,7 +248,7 @@ public class PlayView {
         this.scene = new Scene(root);
         this.stage.setTitle("Initialize");
         this.stage.setScene(scene);
-        stage.getScene().getWindow().requestFocus();
+        this.stage.getScene().getWindow().requestFocus();
         this.stage.show();
 
         if (this.visImpaired) {
