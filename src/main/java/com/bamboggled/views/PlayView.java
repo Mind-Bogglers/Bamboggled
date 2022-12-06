@@ -154,7 +154,7 @@ public class PlayView {
         Parent root = loader.load();
         Platform.runLater(root::requestFocus);
 
-        // initializing buttons
+        // initializing FXML elements
         boardFour = (RadioButton) root.lookup("#boardFour");
         boardFive = (RadioButton) root.lookup("#boardFive");
         boardFive.setDisable(true); //TODO: remove when the the 5x5 board is implemented

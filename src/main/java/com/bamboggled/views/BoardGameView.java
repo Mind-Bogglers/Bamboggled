@@ -3,7 +3,6 @@ package com.bamboggled.views;
 import com.bamboggled.model.exceptions.*;
 import com.bamboggled.model.model.BoggleModel;
 import com.bamboggled.model.path.Path;
-import com.bamboggled.model.player.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
@@ -104,15 +103,15 @@ public class BoardGameView {
             playerScoreLabel = (Label) root.lookup("#playerScore");
             Scene scene = new Scene(root);
             
-            //timeline
+            // timeline
             timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e -> updateBoard()));
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
 
-            //populate the 2d label array
+            // populate the 2d label array
             initLabelArray();
 
-            //start the game for the first player
+            // start the game for the first player
             try {
                 model.startGameForNextPlayer();
             } catch (NoMorePlayersException e) {
@@ -125,10 +124,10 @@ public class BoardGameView {
                 throw new RuntimeException(e);
             }
 
-            //the path color starts as -1
+            // the path color starts as -1
             this.pathColor = -1;
 
-            //key event handler for user key inputs
+            // key event handler for user key inputs
             scene.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                     int result;
@@ -171,15 +170,13 @@ public class BoardGameView {
                 }
             });
 
-            stage.setScene(scene);
-            stage.setMaximized(true);
-            stage.show();
+            this.stage.setScene(scene);
+            this.stage.setMaximized(true);
+            this.stage.show();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     /**
