@@ -20,14 +20,44 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Welcome screen and menu for Boggle game
+ */
+
 public class WelcomeView {
+
+    /**
+     * Refers to the Stage object of the game
+     * */
     private final Stage stage;
+
+    /**
+     * Refers to the ScreenReader object, needed to read text
+     * */
     private final ScreenReader screenReader;
+
+    /**
+     * Boolean attribute that checks if visually impaired mode is on or off
+     * */
     private boolean visImpaired;
+
+    /**
+     * Refers to the Button object that will redirect to PlayView and start the game
+     * */
     private Button playButton;
+
+    /**
+     * Refers to the Button object that will redirect to InstructionsView and explain the rules
+     * */
     private Button instructionsButton;
 
 
+    /**
+     * Initializes the welcome screen and menu for Boggle game
+     * @param stage the Stage object that the game will be played on
+     * @param visImpaired boolean value that checks if visually impaired mode is on or off
+     * @throws IOException Exception thrown if WelcomeView could not be loaded
+     * */
     public WelcomeView(Stage stage, boolean visImpaired) throws IOException {
         this.screenReader = new ScreenReader();
         this.visImpaired = visImpaired;
@@ -35,13 +65,18 @@ public class WelcomeView {
         start();
     }
 
-
+    /**
+     * Starts the game, initializes all relevant buttons, and sets listeners
+     * @throws IOException Exception thrown if WelcomeView could not be loaded
+     * */
     private void start() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/WelcomeView.fxml"));
         loader.setController(this);
         Parent root = loader.load();
         this.playButton = (Button) root.lookup("#playBtn");
         this.instructionsButton = (Button) root.lookup("#rulesBtn");
+
+        //
         this.playButton.setOnAction(e -> {
             this.visImpaired = false;
             play(e);
@@ -50,6 +85,8 @@ public class WelcomeView {
             this.visImpaired = false;
             rules(e);
         });
+
+        // listener for root event
         root.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 System.exit(0);
