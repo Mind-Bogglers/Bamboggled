@@ -54,7 +54,7 @@ public class PlayView {
     @FXML
     private Label error;
 
-    private final String boards = "Welcome to Player Initialization.  Select 4 or 5 for Board size.  Press ENTER when complete.";
+    private final String boards = "Welcome to Player Initialization.  Press ESCAPE to exit.  Select 4 or 5 for Board size.  Press ENTER when complete.";
 
     private final String names = "Please type out the names of all players.  To type in the name of the next player, hit SHIFT.  If you are done typing player names, hit ENTER to begin Bamboggled.";
 
@@ -106,6 +106,7 @@ public class PlayView {
         error = (Label) root.lookup("#error");
         error.setText("");
         boardFour.setOnAction(e -> {
+            ScreenReader.voice.getAudioPlayer().cancel();
             boardSize = 4;
             this.visImpaired = false;
             board_flag = true;
@@ -113,16 +114,75 @@ public class PlayView {
         boardFive.setOnAction(e -> {
             boardSize = 5;
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             board_flag = true;
         });
         submitPlayer.setOnAction(e -> {
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             submitPlayer(e);
         });
         submit.setOnAction(e -> {
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             submit(e);
         });
+        textField.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.SHIFT) {
+                error.setText("");
+                String text = textField.getText().strip();
+                if (this.players == null) {
+                    this.players = new ArrayList<>();
+                }
+                if (text.equals("")) {
+                    error.setText("Please enter a name.");
+                } else {
+                    this.players.add(new Player(text));
+                    textField.setText("");
+                }
+            } else if (keyEvent.getCode() == KeyCode.ENTER) {
+                error.setText("");
+                if (this.boardSize == 0) {
+                    error.setText("Please select a board size.");
+                } else if (this.players.size() == 0) {
+                    error.setText("Please enter at least one player.");
+                } else {
+                    model.newGame(this.boardSize, this.players);
+                    new BoardGameView((Stage) ((Node) keyEvent.getSource()).getScene().getWindow(), this.visImpaired);
+                }
+            }
+        });
+        root.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ESCAPE) {
+                System.exit(0);
+            } else if (e.isControlDown() && e.getCode() == KeyCode.B) {
+                ScreenReader.voice.getAudioPlayer().cancel();
+                this.visImpaired = false;
+            }
+            if (!board_flag) {
+                if (e.getCode().getCode() == 52 || e.getCode().getCode() == 100) {
+                    this.boardSize = 4;
+                    screenReader.speak(String.format(boardSelection, this.boardSize));
+                    boardFour.setSelected(true);
+                } else if (e.getCode().getCode() == 53 || e.getCode().getCode() == 101) {
+                    this.boardSize = 5;
+                    screenReader.speak(String.format(boardSelection, this.boardSize));
+                    boardFive.setSelected(true);
+                } else if (e.getCode() == KeyCode.ENTER) {
+                    ScreenReader.voice.getAudioPlayer().cancel();
+                    board_flag = true;
+                    textField.requestFocus();
+                    screenReader.speak(String.format(confirmBoard, this.boardSize));
+                    screenReader.speak(names);
+                }
+            }
+        });
+
+        if (boardFive.isSelected() || boardFour.isSelected()) {
+            textField.requestFocus();
+        }
+
+
 
         this.scene = new Scene(root);
 
@@ -133,11 +193,10 @@ public class PlayView {
 
         this.stage.show();
 
-        if (visImpaired) {
+        if (this.visImpaired) {
             this.screenReader.speak(boards);
         }
 
-        this.setListeners();
         textField.setText("");
     }
 
@@ -169,40 +228,5 @@ public class PlayView {
         }
     }
 
-    private void setListeners() {
-        this.stage.getScene().setOnKeyPressed(e -> {
-            System.out.println("pressed");
-            if (e.isControlDown() && e.getCode() == KeyCode.B) {
-                ScreenReader.voice.getAudioPlayer().cancel();
-                this.visImpaired = false;
-            }
-            if (!board_flag) {
-                if (e.getCode().getCode() == 52 || e.getCode().getCode() == 100) {
-                    this.boardSize = 4;
-                    screenReader.speak(String.format(boardSelection, this.boardSize));
-                    boardFour.setSelected(true);
-                } else if (e.getCode().getCode() == 53 || e.getCode().getCode() == 101) {
-                    this.boardSize = 5;
-                    screenReader.speak(String.format(boardSelection, this.boardSize));
-                    boardFive.setSelected(true);
-                } else if (e.getCode() == KeyCode.ENTER) {
-                    screenReader.speak(String.format(confirmBoard, this.boardSize));
-                    screenReader.speak(names);
-                    board_flag = true;
-                    textField.requestFocus();
-                }
-            }
-        });
-        if (boardFive.isSelected() || boardFour.isSelected()) {
-                textField.requestFocus();
-        }
-        textField.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.SHIFT) {
-                submitPlayer.fire();
-            } else if (keyEvent.getCode() == KeyCode.ENTER) {
-                submit.fire();
-            }
-        });
-    }
 }
 
