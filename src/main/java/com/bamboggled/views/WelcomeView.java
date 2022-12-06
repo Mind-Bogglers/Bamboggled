@@ -27,6 +27,8 @@ public class WelcomeView {
     private Button playButton;
     private Button instructionsButton;
 
+    private final String intro = "Welcome to Bamboggled.  Press Control B after this message is complete to disable Visually Impaired Mode. Press I for instructions. Press SHIFT to play. Press ESCAPE to exit.";
+
 
     public WelcomeView(Stage stage, boolean visImpaired) throws IOException {
         this.screenReader = new ScreenReader();
@@ -44,10 +46,12 @@ public class WelcomeView {
         this.instructionsButton = (Button) root.lookup("#rulesBtn");
         this.playButton.setOnAction(e -> {
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             play(e);
         });
         this.instructionsButton.setOnAction(e -> {
             this.visImpaired = false;
+            ScreenReader.voice.getAudioPlayer().cancel();
             rules(e);
         });
         root.setOnKeyPressed(event -> {
@@ -55,17 +59,23 @@ public class WelcomeView {
                 System.exit(0);
             } else if (event.isControlDown() && event.getCode() == KeyCode.B) {
                 this.visImpaired = !this.visImpaired;
-                if (this.visImpaired) {
-                    this.screenReader.speak("Welcome to Bamboggled.  Press Control B after this message is complete to disable Visually Impaired Mode. Press I for instructions. Press P to play. Press Escape to exit.");
-//                    this.screenReader.speak("Test");
-                } else {
+                if (!this.visImpaired) {
                     ScreenReader.voice.getAudioPlayer().cancel();
                 }
-            } else if (event.getText().equals("p") || event.getCharacter().equals("P")) {
-                System.out.println("HERE");
-                playButton.fire();
-            } else if (event.getText().equals("i") || event.getCharacter().equals("I")) {
-                instructionsButton.fire();
+            } else if (event.getCode() == KeyCode.SHIFT) {
+                ScreenReader.voice.getAudioPlayer().cancel();
+                try {
+                    new PlayView((Stage) ((Node) event.getSource()).getScene().getWindow(), this.visImpaired);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else if (event.getCode() == KeyCode.I) {
+                ScreenReader.voice.getAudioPlayer().cancel();
+                try {
+                    new InstructionsView((Stage) ((Node) event.getSource()).getScene().getWindow(), this.visImpaired);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         this.stage.setTitle("Bamboggled");
@@ -73,8 +83,9 @@ public class WelcomeView {
         this.stage.show();
 
         if (this.visImpaired) {
-            this.screenReader.speak("Welcome to Bamboggled.  Press Control B after this message is complete to disable Visually Impaired Mode. Press I for instructions. Press P to play. Press Escape to exit.");
-//            this.screenReader.speak("Test");
+            this.screenReader.speak(intro);
+        } else {
+            ScreenReader.voice.getAudioPlayer().cancel();
         }
     }
 
@@ -89,17 +100,12 @@ public class WelcomeView {
     }
 
     public void rules(ActionEvent e) {
+        ScreenReader.voice.getAudioPlayer().cancel();
         try {
             new InstructionsView((Stage) ((Node) e.getSource()).getScene().getWindow(), this.visImpaired);
         } catch (IOException ioException) {
             System.out.println("Error loading welcome view");
         }
-    }
-
-    private void setVoice(Voice voice) {
-        voice.setRate(100);
-        voice.setPitch(150);
-        voice.setVolume(10);
     }
 
 }

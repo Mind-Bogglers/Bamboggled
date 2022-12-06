@@ -42,7 +42,8 @@ public class BoardGameView {
     private int pathColor;
     private boolean visImpaired;
 
-    public BoardGameView(Stage stage, boolean visImpaired){
+    public BoardGameView(Stage stage, boolean visImpaired) {
+        System.out.println(visImpaired);
         this.visImpaired = visImpaired;
         this.model = BoggleModel.getInstance();
         this.stage = stage;
