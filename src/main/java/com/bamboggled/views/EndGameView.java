@@ -24,10 +24,15 @@ public class EndGameView {
     private Label winnerLabel;
     private boolean visImpaired;
 
+    private final String winner_text = "Congratulations, %s won!";
+
+    private final String command = "Press SHIFT to play again, or CONTROL key to exit";
+
     private ScreenReader screenReader;
 
     public EndGameView(Stage stage, boolean visImpaired){
         this.visImpaired = visImpaired;
+        System.out.println(visImpaired);
         this.model = BoggleModel.getInstance();
         this.stage = stage;
         this.screenReader = new ScreenReader();
@@ -42,7 +47,10 @@ public class EndGameView {
             Scene scene = new Scene(root);
             winnerLabel = (Label) root.lookup("#winnerLabel");
             playAgainButton = (Button) root.lookup("#playAgainButton");
-            playAgainButton.setOnAction(this::restartgame);
+            playAgainButton.setOnAction(e -> {
+                ScreenReader.voice.getAudioPlayer().cancel();
+                restartgame(e);
+            });
             playAgainButton.setText("Play Again");
 
             //get the player who won
@@ -57,17 +65,34 @@ public class EndGameView {
             //set the label to the winner
             winnerLabel.setText(winner + " won!");
 
+            String finalWinner = winner;
+            root.setOnKeyPressed(event -> {
+                if (event.isControlDown() && event.getCode() == KeyCode.B) {
+                    this.visImpaired = !this.visImpaired;
+                    if (this.visImpaired) {
+                        this.screenReader.speak(String.format(winner_text, finalWinner));
+                        this.screenReader.speak(command);
+                    } else {
+                        ScreenReader.voice.getAudioPlayer().cancel();
+                    }
+                } else if (event.getCode() == KeyCode.CONTROL) {
+                    System.exit(0);
+                } else if (event.getCode() == KeyCode.SHIFT) {
+                    try {
+                        new PlayView((Stage) ((Node) event.getSource()).getScene().getWindow(), this.visImpaired);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
             if (this.visImpaired) {
-                this.screenReader.speak(String.format("Congratulations, %s won!", winner));
-                this.screenReader.speak("Press SHIFT to play again, or ESCAPE key to exit");
+                this.screenReader.speak(String.format(winner_text, winner));
+                this.screenReader.speak(command);
             }
-
-
 
             this.stage.setScene(scene);
             stage.show();
-
-            this.setListeners();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -85,20 +110,6 @@ public class EndGameView {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    private void setListeners() {
-        this.stage.getScene().setOnKeyPressed(e -> {
-            if (e.isControlDown() && e.getCode() == KeyCode.B) {
-                this.visImpaired = !this.visImpaired;
-            }
-            if (e.getCode() == KeyCode.SHIFT) {
-                playAgainButton.fire();
-            }
-            if (e.getCode() == KeyCode.ESCAPE) {
-                System.exit(0);
-            }
-        });
     }
 
 

@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.security.Key;
 
 public class InstructionsView {
     private final ScreenReader screenReader;
@@ -19,7 +20,7 @@ public class InstructionsView {
 
     private final String instructions = "Each player is given a board that contains anywhere from 16 to 25 letters.  The objective is to find every possible legal word on the board.  A legal word can be defined by a string of letters such that each letter is either directly to the left or right, above or below, or diagonal to any letter preceding or following it.  The player that finds the most number of words wins.";
 
-    private final String exit = "Press the escape key to return to the main menu.";
+    private final String command = "Press the escape key to return to the main menu.  Press CONTROL to exit the game.";
 
     public InstructionsView(Stage stage, boolean visImpaired) throws IOException {
         this.visImpaired = visImpaired;
@@ -32,19 +33,27 @@ public class InstructionsView {
         Parent root = loader.load();
         root.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                backButton.fire();
+                try {
+                    new WelcomeView((Stage) ((Node) event.getSource()).getScene().getWindow(), visImpaired);
+                } catch (IOException ioException) {
+                    System.out.println("Error loading welcome view");
+                }
             } else if (event.isControlDown() && event.getCode() == KeyCode.B) {
                 this.visImpaired = !this.visImpaired;
                 if (this.visImpaired) {
                     this.screenReader.speak(instructions);
-                    this.screenReader.speak(exit);
+                    this.screenReader.speak(command);
                 } else {
                     ScreenReader.voice.getAudioPlayer().cancel();
                 }
             }
         });
         this.backButton = (Button) root.lookup("#backButton");
-        backButton.setOnAction(this::back);
+        backButton.setOnAction(e -> {
+            ScreenReader.voice.getAudioPlayer().cancel();
+            this.visImpaired = false;
+            back(e);
+        });
 
 
         stage.setTitle("Instructions");
@@ -54,7 +63,7 @@ public class InstructionsView {
 
         if (visImpaired) {
             this.screenReader.speak(instructions);
-            this.screenReader.speak(exit);
+            this.screenReader.speak(command);
         }
     }
 
