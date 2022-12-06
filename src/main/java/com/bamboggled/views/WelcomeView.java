@@ -19,12 +19,12 @@ import java.io.IOException;
 public class WelcomeView {
 
     /**
-     * Refers to the Stage object of the game
+     * Stage that stores the GUI elements
      * */
     private final Stage stage;
 
     /**
-     * Refers to the ScreenReader object, needed to read text
+     * ScreenReader object used to read text for visually impaired mode
      * */
     private final ScreenReader screenReader;
 
