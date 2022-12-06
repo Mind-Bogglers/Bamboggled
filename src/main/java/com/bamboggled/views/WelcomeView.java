@@ -64,13 +64,16 @@ public class WelcomeView {
      * @throws IOException Exception thrown if WelcomeView could not be loaded
      * */
     private void start() throws IOException {
+        // loading FXML file
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/WelcomeView.fxml"));
         loader.setController(this);
         Parent root = loader.load();
+
+        // initializing buttons
         this.playButton = (Button) root.lookup("#playBtn");
         this.instructionsButton = (Button) root.lookup("#rulesBtn");
 
-        //
+        // listeners for buttons
         this.playButton.setOnAction(e -> {
             this.visImpaired = false;
             ScreenReader.voice.getAudioPlayer().cancel();
@@ -107,6 +110,8 @@ public class WelcomeView {
                 }
             }
         });
+
+        // setting stage properties
         this.stage.setTitle("Bamboggled");
         this.stage.setScene(new Scene(root));
         this.stage.show();
@@ -118,7 +123,10 @@ public class WelcomeView {
         }
     }
 
-
+    /**
+     * Action method for play button
+     * @param e ActionEvent that led to the button being clicked
+     * */
     public void play(ActionEvent e) {
         try {
             new PlayView((Stage) ((Node) e.getSource()).getScene().getWindow(), this.visImpaired);
@@ -128,6 +136,10 @@ public class WelcomeView {
 //        stage.close();
     }
 
+    /**
+     * Action method for instructions button
+     * @param e ActionEvent that led to the button being clicked
+     * */
     public void rules(ActionEvent e) {
         ScreenReader.voice.getAudioPlayer().cancel();
         try {
