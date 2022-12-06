@@ -82,13 +82,6 @@ public class BoardGameView {
     }
 
     /**
-     * Empty initializer for initializing from button click
-     */
-    public BoardGameView(){
-
-    }
-
-    /**
      * Loads the BoardGameView screen
      */
     public void initBoardViewUI(){

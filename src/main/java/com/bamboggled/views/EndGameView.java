@@ -54,7 +54,7 @@ public class EndGameView {
     /**
      * Text read out for user commands
      */
-    private final String command = "Press SHIFT to play again, or CONTROL key to exit";
+    private final String command = "Press SHIFT to play again, or ESCAPE key to exit";
 
     /**
      * ScreenReader object used to read text for visually impaired mode
@@ -120,7 +120,7 @@ public class EndGameView {
                     } else {
                         ScreenReader.voice.getAudioPlayer().cancel();
                     }
-                } else if (event.getCode() == KeyCode.CONTROL) {
+                } else if (event.getCode() == KeyCode.ESCAPE) {
                     System.exit(0);
                 } else if (event.getCode() == KeyCode.SHIFT) {
                     try {
@@ -143,13 +143,6 @@ public class EndGameView {
             throw new RuntimeException(e);
         }
 
-    }
-
-    /**
-     * Empty initializer for initializing from button click
-     */
-    public EndGameView(){
-        this.model = BoggleModel.getInstance();
     }
 
     /**
