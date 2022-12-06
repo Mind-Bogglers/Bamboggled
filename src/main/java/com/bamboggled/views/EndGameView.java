@@ -98,7 +98,7 @@ public class EndGameView {
 
             playAgainButton.setText("Play Again");
 
-            //get the player who won
+            // get the player who won
             String winner = "Nobody";
             int maxScore = -1;
             for (Player p: model.getPlayers()) {
@@ -107,7 +107,7 @@ public class EndGameView {
                     winner = p.getName();
                 }
             }
-            //set the label to the winner
+            // set the label to the winner
             winnerLabel.setText(winner + " won!");
 
             // listener for root

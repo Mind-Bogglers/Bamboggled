@@ -1,7 +1,5 @@
 package com.bamboggled;
 
-import com.bamboggled.model.model.BoggleModel;
-
 import com.bamboggled.views.WelcomeView;
 import javafx.application.Application;
 import javafx.stage.Stage;

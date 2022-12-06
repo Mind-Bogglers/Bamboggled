@@ -43,7 +43,7 @@ public class WelcomeView {
      * */
     private Button instructionsButton;
 
-    private final String intro = "Welcome to Bamboggled.  Press Control B after this message is complete to disable Visually Impaired Mode. Press I for instructions. Press SHIFT to play. Press ESCAPE to exit.";
+    private final String intro = "Welcome to Bamboggled.  Press Control B to disable Visually Impaired Mode. Press I for instructions. Press SHIFT to play. Press ESCAPE to exit.";
 
 
     /**
