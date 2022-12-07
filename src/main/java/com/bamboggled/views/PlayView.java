@@ -25,7 +25,7 @@ public class PlayView {
     /**
      * Board size selection radio buttons
      * */
-    public ToggleGroup board;
+    private ToggleGroup board;
 
     /**
      * Boggle model
@@ -61,7 +61,7 @@ public class PlayView {
      * Radio button for board of size 4
      */
     @FXML
-    RadioButton boardFour;
+    private RadioButton boardFour;
 
     /**
      * Radio button for board of size 5
@@ -74,13 +74,13 @@ public class PlayView {
      */
 
     @FXML
-    public Button done;
+    private Button done;
 
     /**
      * Submit player button to submit player
      */
     @FXML
-    public Button submitPlayer;
+    private Button submitPlayer;
 
     /**
      * Text field for writing player name(s)
