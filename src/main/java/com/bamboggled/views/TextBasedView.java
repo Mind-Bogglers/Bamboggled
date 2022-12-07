@@ -15,19 +15,38 @@ import java.util.Scanner;
  * @author Hassan El-Sheikha
  */
 public class TextBasedView {
+
+    /**
+     * Boggle model
+     */
     private BoggleModel model;
+
+    /**
+     * Scanner object
+     */
     private Scanner scanner;
 
+    /**
+     * Launches text-based view
+     * @param args Any arguments
+     */
     public static void main(String[] args) {
         TextBasedView view = new TextBasedView(BoggleModel.getInstance());
         view.play();
     }
 
+    /**
+     * Initializes Scanner object
+     * @param model Boggle model
+     */
     public TextBasedView(BoggleModel model) {
         this.scanner = new Scanner(System.in);
         this.model = model;
     }
 
+    /**
+     * Starts the text-based Boggle game
+     */
     public void play() {
         int boardSize;
         System.out.println("Welcome to Boggle!");
@@ -125,6 +144,11 @@ public class TextBasedView {
         }
     }
 
+    /**
+     * Helper for play method that prints board with path
+     * @param grid grid for Boggle game
+     * @param path path for a given word
+     */
     private void printBoardWithPath(BoggleGrid grid, Path path) {
         for (int i = 0; i < grid.numRows(); i++) {
             for (int j = 0; j < grid.numCols(); j++) {

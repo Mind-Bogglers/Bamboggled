@@ -1,71 +1,93 @@
 package com.bamboggled.views;
 
-//import javafx.*;
 import com.bamboggled.model.exceptions.*;
 import com.bamboggled.model.model.BoggleModel;
 import com.bamboggled.model.path.Path;
-import com.bamboggled.model.player.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
 
-import static java.lang.Thread.sleep;
-
-
+/**
+ * Initializes Boggle board view
+ */
 public class BoardGameView {
 
+    /**
+     * 4x4 array of Labels for board of size 4
+     */
     private Label[][] labels = new Label[4][4];
 
+    /**
+     * Boggle model
+     */
     private BoggleModel model;
 
+    /**
+     * Stage that stores the GUI elements
+     */
     private Stage stage;
 
+    /**
+     * GridPane object for board of size 4
+     */
     private GridPane grid4;
 
+    /**
+     * Timeline object to keep track of events
+     */
     private Timeline timeline;
 
+    /**
+     * Label to store current player's name
+     */
     private Label playerNameLabel;
+
+    /**
+     * Label to store current player's score
+     */
     private Label playerScoreLabel;
+
+    /**
+     * Integer that is assigned to a particular color, which indicates if the path associated
+     * with a given word is valid (green), invalid (red), or already played (yellow)
+     */
     private int pathColor;
+
+    /**
+     * Boolean attribute that checks if visually impaired mode is on or off
+     */
     private boolean visImpaired;
 
+
+    /**
+     * Initializes BoardGameView
+     * @param stage Stage that stores the GUI elements
+     * @param visImpaired Boolean attribute that checks if visually impaired mode is on or off
+     */
     public BoardGameView(Stage stage, boolean visImpaired) {
         System.out.println(visImpaired);
         this.visImpaired = visImpaired;
         this.model = BoggleModel.getInstance();
         this.stage = stage;
         initBoardViewUI();
-        //sanity test
-        for (Player p: this.model.getPlayers()) {
-            System.out.println(p.getName());
-        }
-
     }
 
-    public BoardGameView(){
-
-    }
-
-
-    // TODO: add event handlers for key events and implement updateBoard and paintBoard
+    /**
+     * Loads the BoardGameView screen
+     */
     public void initBoardViewUI(){
 
         try {
             // Set the root node, scene and also get a reference to the grid for grid4
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/BoardGameView.fxml"));
             loader.setController(this);
             AnchorPane root = loader.load();
@@ -74,15 +96,15 @@ public class BoardGameView {
             playerScoreLabel = (Label) root.lookup("#playerScore");
             Scene scene = new Scene(root);
             
-            //timeline
+            // timeline
             timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e -> updateBoard()));
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
 
-            //populate the 2d label array
+            // populate the 2d label array
             initLabelArray();
 
-            //start the game for the first player
+            // start the game for the first player
             try {
                 model.startGameForNextPlayer();
             } catch (NoMorePlayersException e) {
@@ -95,12 +117,10 @@ public class BoardGameView {
                 throw new RuntimeException(e);
             }
 
-            System.out.println(model.getAllWordsOnGrid());  //for cheating purposes
-
-            //the path color starts as -1
+            // the path color starts as -1
             this.pathColor = -1;
 
-            //key event handler for user key inputs
+            // key event handler for user key inputs
             scene.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                     int result;
@@ -122,8 +142,6 @@ public class BoardGameView {
                     } catch (NoMorePlayersException e) {
                         timeline.stop();
                         new EndGameView(this.stage, this.visImpaired);
-                        //throw new RuntimeException(e);
-                        //TODO: Connect with gameEndView
                     } catch (GameAlreadyInProgressException e) {
                         throw new RuntimeException(e);
                     } catch (PlayerAlreadyPlayedException e) {
@@ -145,22 +163,18 @@ public class BoardGameView {
                 }
             });
 
-
-
-
-            stage.setScene(scene);
-            stage.setMaximized(true);
-            stage.show();
-
-
+            this.stage.setScene(scene);
+            this.stage.setMaximized(true);
+            this.stage.show();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
+    /**
+     * Method to update board
+     */
     private void updateBoard() {
         try {
             paintBoard(this.pathColor, model.getPathToWord());
@@ -169,6 +183,9 @@ public class BoardGameView {
         }
     }
 
+    /**
+     * Method to paint board
+     */
     private void paintBoard() {
         Path path;
         try {
@@ -176,8 +193,10 @@ public class BoardGameView {
         } catch (EmptyWordException e) {
             path = null;
         }
+        // update labels
         playerNameLabel.setText(model.getCurrentPlayer().getName());
         playerScoreLabel.setText(String.valueOf(model.getCurrentPlayer().getScore()));
+        // change path color
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 labels[i][j].setText(Character.toString(model.getCurrentGrid().getCharAt(i, j)));
@@ -190,9 +209,17 @@ public class BoardGameView {
         }
     }
 
+    /**
+     * Method to paint board with parameters
+     * @param customPathColor color of path, depending on correctness of word
+     * @param path path of word
+     */
     private void paintBoard(int customPathColor, Path path) {
+        // update labels
         playerNameLabel.setText(model.getCurrentPlayer().getName());
         playerScoreLabel.setText(String.valueOf(model.getCurrentPlayer().getScore()));
+
+        // change color of tiles
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 labels[i][j].setText(Character.toString(model.getCurrentGrid().getCharAt(i, j)));
@@ -213,7 +240,9 @@ public class BoardGameView {
         }
     }
 
-
+    /**
+     * Initialize each label in board
+     */
     private void initLabelArray(){
         for (int i = 0; i<4; i++){
             for (int j = 0; j<4; j++){
@@ -228,20 +257,4 @@ public class BoardGameView {
             }
         }
     }
-
-
-
-    public void test() {
-        for (Node n: grid4.getChildren()) {
-            Label newNode = (Label) n;
-            System.out.println(newNode.getText());
-            System.out.println(newNode.getBackground().getFills());
-        }
-    }
-
-
-
-
-
-
 }

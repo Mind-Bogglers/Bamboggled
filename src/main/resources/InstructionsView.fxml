@@ -13,6 +13,6 @@
             </font>
         </Label>
         <Label layoutX="21.0" layoutY="72.0" prefHeight="111.0" prefWidth="357.0" text="Each player is given a board that contains anywhere from 16 to 25 letters.  The objective is to find every possible legal word on the board.  A legal word can be defined by a string of letters such that each letter is either directly to the left or right, above or below, or diagonal to any letter preceding or following it.  The player that finds the most number of words wins." wrapText="true" />
-      <Button fx:id="backButton" layoutX="362.0" layoutY="14.0" mnemonicParsing="false" text="X" />
+      <Button fx:id="backButton" id="backButton" layoutX="362.0" layoutY="14.0" mnemonicParsing="false" text="X" />
     </children>
 </AnchorPane>
